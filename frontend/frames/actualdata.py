@@ -1,5 +1,5 @@
 from tkinter import Button, Entry, Label, LabelFrame
-from tkinter.ttk import Button, Entry, Label, Labelframe, Combobox
+from tkinter.ttk import Button, Entry, Label, Labelframe, Combobox, Separator
 
 class StudentData(Labelframe):
     """Contains data of selected student"""
@@ -38,24 +38,29 @@ class StudentData(Labelframe):
 
         self.address_of_student_lab = Label(
             self,
-            text="Adres studenta"
+            text="Adres dziecka"
             )
         self.address_of_student_lab.grid(row=4, column=2)
         self.address_of_student_entry = Entry(self)
         self.address_of_student_entry.grid(row=4, column=3)
 
+        # self.line = Separator(self, orient="horizontal")
+        # self.line.grid(row=5, column=0)
 
+        self.sort_of_school_lab = Label(self, text="Rodzaj szkoły")
+        self.sort_of_school_lab.grid(row=6, column=0)
+        self.sort_of_school_box = Combobox(self)
+        self.sort_of_school_box.grid(row=6, column=1)
 
+        self.city_of_school_lab = Label(self, text="Miejscowość")
+        self.city_of_school_lab.grid(row=6, column=2)
+        self.city_of_scholl_box = Combobox(self)
+        self.city_of_scholl_box.grid(row=6, column=3)
 
-        # self.sort_of_school_lab = Label(self, text="Rodzaj szkoły")
-        # self.sort_of_school_lab.grid(row=5, column=0)
-        # self.sort_of_school_box = Combobox(self)
-        # self.sort_of_school_box.grid(row=5, column=1)
-
-        # self.city_of_school_lab = Label(self, text="Miejscowość")
-        # self.city_of_school_lab.grid(row=5, column=2)
-        # self.city_of_scholl_box = Combobox(self)
-        # self.city_of_scholl_box.grid(row=5, column=3)
+        self.school_lab = Label(self, text="Szkoła:")
+        self.school_lab.grid(row=7, column=0)
+        self.school = Combobox(self)
+        self.school.grid(row=7, column=1)
         
-        # self.button = Button(self, text="jjjj")
-        # self.button.grid(row=6, column=0)
+        self.button = Button(self, text="jjjj")
+        self.button.grid(row=8, column=0)
