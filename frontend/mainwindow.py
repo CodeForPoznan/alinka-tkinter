@@ -64,7 +64,7 @@ class MainWindow():
         applicationframe
         '''
         if self.validate_student_content():
-            print("braki w student content")
+            # braki w student content
             return
         '''
         Check if there is or isn't student pesel in student table
@@ -72,7 +72,7 @@ class MainWindow():
 
         '''
         if self.validate_staffmeeting_content():
-            print("braki w staff content")
+            # braki w staff content
             return
         
         values = self.values()
@@ -92,10 +92,10 @@ class MainWindow():
         '''
         if self.base.staffmeeting_exists(values):
             self.base.update_staffmeeting(values)
-            print('zaktualizowano staffmeeting')
+            # zaktualizowano staffmeeting
         else:
             self.base.add_staffmeeting(values)
-            print('dodano nowy staffmeeting')
+            # dodano nowy staffmeeting
         self.notebook.fill_student_list()
         self.notebook.fill_staffmeeting_list()
     
@@ -234,7 +234,7 @@ class MainWindow():
             or 
             (not self.staff_meeting_frame.table.get_children())
             ):
-            print("niewypełniony staff")
+            # niewypełniony staff
             return staff_meeting_list
         '''Construct list of staff with specialization'''
         staff_meeting_list = {'team': []}
@@ -251,6 +251,8 @@ class MainWindow():
         return staff_meeting_list
 
     def get_disability(self, disability1, disability2):
+        if len(disability2) < 3:
+            disability2 = ""
         if disability1 != "" and disability2 == "":
             return [disability1, disability1, ""]
         if disability1 != "" and disability2 != "":

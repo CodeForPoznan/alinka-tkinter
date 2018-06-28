@@ -71,6 +71,7 @@ class Application(Labelframe):
         if self.application_subject.get() == "wczesne wspomaganie rozwoju":
             self.application_reason['values'] = reasons[:9]
         
+        
     def insert_application_data(self, student):
         for entry, key in zip(
             [
