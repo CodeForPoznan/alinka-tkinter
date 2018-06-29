@@ -162,6 +162,8 @@ class Protokol():
             )
 
     def save(self):
+        if not os.path.exists('./orzeczenia'):
+            os.makedirs('./orzeczenia')
         self.document.save(
             os.path.join(
                 './orzeczenia',

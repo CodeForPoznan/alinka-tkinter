@@ -1087,6 +1087,8 @@ class Decision():
         insert_reciver(self.document, self.value)
 
     def save(self):
+        if not os.path.exists('./orzeczenia'):
+            os.makedirs('./orzeczenia')
         self.document.save('tmp.docx')
 
     def insert_footnotes(self):

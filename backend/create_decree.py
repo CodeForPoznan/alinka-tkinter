@@ -78,7 +78,9 @@ class Decree():
             )
         staff_decree(self.document, self.values)
 
-    def save(self):     
+    def save(self):
+        if not os.path.exists('./orzeczenia'):
+            os.makedirs('./orzeczenia')
         self.document.save(
             os.path.join(
                 './orzeczenia',
