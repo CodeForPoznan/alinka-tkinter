@@ -1094,6 +1094,7 @@ class Decision():
     def insert_footnotes(self):
         zipedfile = ZipFile("tmp.docx", "r")
         zipedfile.extractall(path="new")
+        zipedfile.close()
         insert_footnotes_xml1(self.value['footnotes'])
         document_xml_change1()
         change_content_xml()

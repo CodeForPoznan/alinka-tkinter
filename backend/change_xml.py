@@ -7,13 +7,13 @@ from backend.data_xml import *
 
         
 def insert_footnotes_xml1(footnotes_list):
-    with open('new/word/footnotes.xml', 'w') as xml_to_save:
+    with open('new/word/footnotes.xml', 'w', encoding='UTF-8') as xml_to_save:
         footnotes_xml = footnote_base
         index = 2
         for i in footnotes_list:
             footnotes_xml += '''<w:footnote w:id="{}"><w:p><w:pPr>\
             <w:pStyle w:val="Przypisdolny"/></w:pPr><w:r><w:rPr>\
-            <w:sz w:val="14"/></w:rPr><w:footnoteRef/><w:tab/>\
+            <w:sz w:val="14"/></w:rPr><w:footnoteRef/>\
             <w:t>)</w:t></w:r><w:r><w:rPr><w:sz w:val="14"/></w:rPr>\
             <w:t xml:space="preserve"> {}</w:t></w:r></w:p>\
             </w:footnote>'''.format(index, i)
@@ -65,12 +65,17 @@ def change_rels():
 def save_changed_xml(path, name):
     os.remove("tmp.docx")
     zipedfile = ZipFile(name, 'w')
-
+    list_of_files=[]
     for i in os.walk(path):
         for x in i[2]:
-            arcname_ = "{}/{}".format(i[0], x).replace("{}/".format(path),"")
+            new_path = os.path.join(i[0],x)
+            list_of_files.append(new_path)
+    prefix_to_remove = os.path.commonprefix(list_of_files)
+
+    for i in os.walk(path):
+        for x in i[2]:        
+            arcname_ = os.path.join(i[0],x).replace(prefix_to_remove,"")
             zipedfile.write("{}/{}".format(i[0], x), arcname=arcname_)
-    
     zipedfile.close()
 
 def delete_xml_folder(path):
