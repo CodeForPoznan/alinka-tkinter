@@ -37,6 +37,7 @@ class Application(Labelframe):
         self.application_subject_lab.grid(row=2, column=3, padx=5, pady=5)
         self.application_subject = Combobox(self, width=40, values=application)
         self.application_subject.grid(row=2, column=4, columnspan=3, padx=5, pady=5)
+        self.application_subject.bind('<<ComboboxSelected>>', self.choosed_subject)
         
         self.application_reason_lab = Label(self, text="Z uwagi na")
         self.application_reason_lab.grid(row=3, column=3, padx=5, pady=5, sticky='e')
@@ -58,18 +59,37 @@ class Application(Labelframe):
         if self.application_subject.get() == "kształcenie specjalne":
             self.application_reason['values'] = reasons[0:-2]
             self.application_reason2['values'] = reasons[0:-2]
+            self.timespan_ind.config(state='disabled')
+            self.timespan.config(state='active')
+            self.application_reason2.config(state='active')
         if self.application_subject.get() in [
             "indywidualne roczne przygotowanie przedszkolne",
             "indywidualne nauczanie"
             ]:
             self.application_reason['values'] = reasons[-2:]
+            self.timespan.config(state='disabled')
+            self.timespan_ind.config(state='active')
+            self.application_reason2.config(state='disabled')
         if self.application_subject.get() in [
             "zajęcia rewalidacyjno-wychowawcze indywidualne",
             "zajęcia rewalidacyjno-wychowawcze zespołowe"
             ]:
             self.application_reason['values'] = (reasons[3],)
+            self.timespan.config(state='disabled')
+            self.timespan_ind.config(state='disabled')
+            self.application_reason2.config(state='disabled')
         if self.application_subject.get() == "wczesne wspomaganie rozwoju":
             self.application_reason['values'] = reasons[:9]
+            self.timespan_ind.config(state='disabled')
+            self.timespan.config(state='active')
+            self.application_reason2.config(state='disabled')
+    
+    def choosed_subject(self, event):
+        actual_reason = self.application_reason.get()
+        self.get_reason()
+        supposed_reason = self.application_reason['values']
+        if actual_reason not in supposed_reason:
+            self.application_reason.delete(0, 'end')
         
         
     def insert_application_data(self, student):
