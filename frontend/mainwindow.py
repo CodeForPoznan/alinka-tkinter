@@ -1,5 +1,4 @@
 from tkinter import Button, Toplevel
-# import re
 
 from .values import (
     footnotes_development_support,
@@ -54,6 +53,8 @@ class MainWindow():
         self.close_button.grid(row=7, column=2, sticky='w')
         self.staff_meeting_frame.insert_staff(self.base, staff={'team' : [], 'id' : ""})
 
+
+
         self.fake_data()
         self.notebook.fill_student_list()
         self.notebook.fill_staffmeeting_list()
@@ -65,7 +66,7 @@ class MainWindow():
         '''
         if self.validate_student_content():
             # braki w student content
-            return
+            return 1
         '''
         Check if there is or isn't student pesel in student table
         and add or update student data accordingly
@@ -73,7 +74,7 @@ class MainWindow():
         '''
         if self.validate_staffmeeting_content():
             # braki w staff content
-            return
+            return 1
         
         values = self.values()
         '''
@@ -105,20 +106,23 @@ class MainWindow():
         self.staff_meeting_frame.clear()
         
     def issue_decision(self):
-        self.save_data()    
+        if self.save_data():
+            return
         create = Decision(self.values())
         create.issue()
         create.save()
         create.insert_footnotes()
     
     def create_decree(self):
-        self.save_data()
+        if self.save_data():
+            return
         create = Decree(self.values())
         create.create()
         create.save()
 
     def create_protokol(self):
-        self.save_data()
+        if self.save_data():
+            return
         create = Protokol(self.values())
         create.create()
         create.save()
