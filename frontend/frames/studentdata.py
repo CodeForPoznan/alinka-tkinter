@@ -13,7 +13,7 @@ class ListOfData(Labelframe):
 
         self.student = Frame(self.notebook)
         self.student.grid(row=0, column=0)
-        self.student_list = Treeview(self.student, height=29, columns=("name", "pesel"), displaycolumns="name")
+        self.student_list = Treeview(self.student, height=24, columns=("name", "pesel"), displaycolumns="name")
         self.student_list.heading('name', text="Nazwisko i imię", anchor='w')
         self.student_list.column('name', width=240)
         self.student_list['show'] = 'headings'
@@ -24,7 +24,7 @@ class ListOfData(Labelframe):
 
         self.staff_meeting = Frame(self.notebook)
         self.staff_meeting.grid(row=0, column=0)
-        self.table = Treeview(self.staff_meeting, height=29, columns=("name", "id", "student_id"), displaycolumns="name")
+        self.table = Treeview(self.staff_meeting, height=24, columns=("name", "id", "student_id"), displaycolumns="name")
         self.table.heading('name', text='Zespoły', anchor='w')
         self.table.column('name', width=235)
         self.table.column('#0', stretch=0, width=10)

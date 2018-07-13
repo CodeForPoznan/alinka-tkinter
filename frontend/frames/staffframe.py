@@ -1,18 +1,18 @@
 from tkinter import Button, Entry, Label, LabelFrame, Listbox, DISABLED, ACTIVE
-from tkinter.ttk import Entry, Label, Labelframe, Treeview
+from tkinter.ttk import Entry, Label, Treeview
 
 
-class StaffFrame(Labelframe):
+class StaffFrame(LabelFrame):
     """Contains data of staffmeeteng"""
     def __init__(self, window, base, **kwargs):
-        Labelframe.__init__(self, window, **kwargs)
+        LabelFrame.__init__(self, window, **kwargs)
         self.base = base
         self.staff_id = None
         self.all_staff = [x[0] for x in self.base.get_all_staff()]
         self.data_label = Label(self, text="Data zespołu")
-        self.data_label.grid(row=0, column=0, padx=5, pady=10, sticky='e')
+        self.data_label.grid(row=0, column=0, padx=5, pady=1, sticky='e')
         self.data_entry = Entry(self, width=20)
-        self.data_entry.grid(row=0, column=1, padx=5, pady=5, sticky='w')
+        self.data_entry.grid(row=0, column=1, padx=5, pady=1, sticky='w')
 
         self.table = Treeview(self, columns=("name", "speciality"))
         self.table.heading('#1', text='imię i nazwisko')
@@ -20,20 +20,20 @@ class StaffFrame(Labelframe):
         self.table.column('#1', width = 200)
         self.table.column('#2', width = 200)
 
-        self.table.grid(row=1,column=0, rowspan=3, columnspan=2, padx=5, pady=5)
+        self.table.grid(row=1,column=0, rowspan=1, columnspan=2, padx=5, pady=5)
         self.table['show'] = 'headings'
         self.table.bind('<<TreeviewSelect>>', self.on_treeview_selected)
 
-        self.another_stuff_frame = Labelframe(self, text="Inni specjaliści")
-        self.another_stuff_frame.grid(row=0, column=2, rowspan=2, pady=5)
+        self.another_stuff_frame = LabelFrame(self, text="Inni specjaliści")
+        self.another_stuff_frame.grid(row=2, column=0, columnspan=2, pady=5)
         
-        self.another_staff = Listbox(self.another_stuff_frame)
-        self.another_staff.grid(row=0, column=2, rowspan=2)
+        self.another_staff = Listbox(self.another_stuff_frame, width=48, height=12)
+        self.another_staff.grid(row=0, column=0, rowspan=2, padx=5, pady=5)
         self.another_staff.bind('<<ListboxSelect>>', self.on_listbox_select)
         self.add_button = Button(self, text="Dodaj członka", command=self.add_member)
-        self.add_button.grid(row=2, column=2)
+        self.add_button.grid(row=3, column=0, padx=5, pady=5)
         self.delete_button = Button(self, text="Usuń członka", command=self.remove_member)
-        self.delete_button.grid(row=3, column=2)
+        self.delete_button.grid(row=3, column=1, padx=5, pady=5)
     
     def get_all_staff(self):
         return [x[0] for x in self.base.get_all_staff()]

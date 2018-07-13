@@ -29,30 +29,30 @@ class MainWindow():
         # self.base.add_fake_data()
         self.window = window
         self.notebook = ListOfData(self.window, self.base, text="Baza danych")
-        self.notebook.grid(row=0, column=0, rowspan=8, sticky='n', padx=5, pady=5)
+        self.notebook.grid(row=0, column=0, rowspan=8, sticky='n', padx=5)
         self.notebook.table.bind('<<TreeviewSelect>>', self.select_meeting)
         self.notebook.student_list.bind('<<TreeviewSelect>>', self.select_student)
 
         self.actual_student = StudentData(self.window, self.base, text="Dane dziecka")
-        self.actual_student.grid(row=0, column=1, columnspan=2, sticky='w', padx=5, pady=5)
+        self.actual_student.grid(row=0, column=1, columnspan=3, sticky='wn', padx=5)
         self.applicationframe = Application(self.window, text="Wnioskodawcy")
-        self.applicationframe.grid(row=1, column=1, columnspan=2, sticky='w', padx=5, pady=5)
+        self.applicationframe.grid(row=1, column=1, columnspan=3, sticky='w', padx=5)
+        self.applicationframe.same.bind('<Button-1>', self.copy_address)
         self.staff_meeting_frame = StaffFrame(self.window, self.base, text="Zespół orzekający")
-        self.staff_meeting_frame.grid(row=2, column=1, rowspan=6, sticky='w', padx=5, pady=5)
+        self.staff_meeting_frame.grid(row=0, column=4, rowspan=2, columnspan=3, sticky='w', padx=5)
         self.add_to_base = Button(self.window, text="Zapisz", width=14, height=2, command=self.save_data)
-        self.add_to_base.grid(row=2, column=2, sticky='w')
+        self.add_to_base.grid(row=2, column=1, sticky='w')
         self.clear_forms = Button(self.window, text="Wyczyść", width=14, height=2, command=self.clear)
-        self.clear_forms.grid(row=3, column=2, sticky='w')
+        self.clear_forms.grid(row=2, column=2, sticky='w')
         self.create_decision = Button(self.window, text="Stwórz orzeczenie", width=14, height=2, command=self.issue_decision)
-        self.create_decision.grid(row=4, column=2, sticky='w')
+        self.create_decision.grid(row=2, column=3, sticky='w')
         self.create_protokol_button = Button(self.window, text="Stwórz zarządzenie", width=14, height=2, command=self.create_decree)
-        self.create_protokol_button.grid(row=5, column=2, sticky='w')
+        self.create_protokol_button.grid(row=2, column=4, sticky='w')
         self.create_decree_button = Button(self.window, text="Stwórz protokół", width=14, height=2, command=self.create_protokol)
-        self.create_decree_button.grid(row=6, column=2, sticky='w')
+        self.create_decree_button.grid(row=2, column=5, sticky='w')
         self.close_button = Button(self.window, text="Zamknij", width=14, height=2, command=self.close)
-        self.close_button.grid(row=7, column=2, sticky='w')
+        self.close_button.grid(row=2, column=6, sticky='w')
         self.staff_meeting_frame.insert_staff(self.base, staff={'team' : [], 'id' : ""})
-
 
 
         self.fake_data()
@@ -61,19 +61,12 @@ class MainWindow():
 
     def save_data(self):
         '''
-        Validate necessary content of actual_student() and
-        applicationframe
+        Validate necessary content of:
+         actual_student, applicationframe, staffmeeting_frame
         '''
-        if self.validate_student_content():
-            # braki w student content
-            return 1
-        '''
-        Check if there is or isn't student pesel in student table
-        and add or update student data accordingly
-
-        '''
-        if self.validate_staffmeeting_content():
-            # braki w staff content
+        valid_student_cont = self.validate_student_content()
+        valid_staff_cont = self.validate_staffmeeting_content()
+        if (valid_staff_cont or valid_student_cont):
             return 1
         
         values = self.values()
@@ -230,6 +223,28 @@ class MainWindow():
             student_pesel = '00' + student_pesel
         student_data = self.base.get_student_data(pesel=student_pesel)
         self.actual_student.insert_actual_data(student_data)
+    
+    def copy_address(self, event):
+        print("przepisuje")
+        for i in [
+                self.applicationframe.city,
+                self.applicationframe.zip_code,
+                self.applicationframe.address
+            ]:
+            i.delete(0, 'end')
+        for x,y in zip(
+            [
+                self.applicationframe.city,
+                self.applicationframe.zip_code,
+                self.applicationframe.address
+            ],
+            [
+                self.actual_student.city_of_student_entry,
+                self.actual_student.zip_code_of_student_entry,
+                self.actual_student.address_of_student_entry
+            ]
+            ):
+            x.insert('end', y.get())
         
     def staff_list(self):
         staff_meeting_list = {'team': []}
@@ -298,30 +313,62 @@ class MainWindow():
     
     
     def validate_student_content(self):
-        if (
-            self.actual_student.name_of_student_n_entry.get() and
-            self.actual_student.pesel_entry.get() and
-            self.actual_student.pesel_validation() and
-            self.actual_student.class_entry.get() and
-            self.actual_student.school.get() and
-            self.applicationframe.application_subject.get() and
-            self.applicationframe.application_reason.get() and
-            (
-                self.applicationframe.timespan.get() or
-                self.applicationframe.timespan_ind.get()
-            )
+        returned_value = 0
+        for i, j in zip(
+            [
+                self.actual_student.name_of_student_n_entry,
+                self.actual_student.name_of_student_g_entry,
+                self.actual_student.id_of_student_entry,
+                self.actual_student.birth_place_entry,
+                self.actual_student.school,
+                self.applicationframe.application_subject,
+                self.applicationframe.application_reason
+
+                ],
+            [
+                self.actual_student.name_of_student_n_lab,
+                self.actual_student.name_of_student_g_lab,
+                self.actual_student.id_of_student,
+                self.actual_student.birth_place_lab,
+                self.actual_student.school_lab,
+                self.applicationframe.application_subject_lab,
+                self.applicationframe.application_reason_lab                
+                ]
             ):
-            return 0
-        else:
-            return 1    
+            if not i.get():
+                j.config(fg='red')
+                returned_value = 1
+            else:
+                j.config(fg='black')
+
+        if self.actual_student.pesel_validation():
+            returned_value = 1
+        
+        if self.applicationframe.application_subject.get() == "kształcenie specjalne":
+            if not self.applicationframe.timespan.get():
+                self.applicationframe.timespan_lab.config(fg='red')
+                returned_value = 1
+            else:
+                self.applicationframe.timespan_lab.config(fg='black')
+        elif self.applicationframe.application_subject.get() in [
+            "indywidualne roczne przygotowanie przedszkolne",
+            "indywidualne nauczanie"
+            ]:
+            if not self.applicationframe.timespan_ind.get():
+                self.applicationframe.timespan_lab.config(fg='red')
+                returned_value = 1
+    
+        return returned_value
     
     def validate_staffmeeting_content(self):
-        if(
+        if (
             self.staff_meeting_frame.data_entry.get() and
             self.staff_meeting_frame.table.get_children()
             ):
+            self.staff_meeting_frame.config(fg='black')
             return 0
         else:
+            self.staff_meeting_frame.config(fg='red')
             return 1
 
     def fake_data(self):
