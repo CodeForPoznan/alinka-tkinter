@@ -19,7 +19,7 @@ class ListOfData(Labelframe):
         self.student_list['show'] = 'headings'
         self.student_list.grid(row=0, column=0)
 
-        self.button = Button(self.student, text="Usuń")
+        self.button = Button(self.student, text="Usuń", command=self.delete_from_student_list)
         self.button.grid(row=1, column=0)
 
         self.staff_meeting = Frame(self.notebook)
@@ -57,9 +57,12 @@ class ListOfData(Labelframe):
 
     def delete_from_student_list(self):
         selected_item = self.student_list.selection()
-        pesel = self.student_list.item(selected_item)['values'][1]
+        pesel = str(self.student_list.item(selected_item)['values'][1])
+        if len(pesel)<11:
+            pesel="0" + pesel
         self.base.delete_student(pesel)
         self.fill_student_list()
+        self.fill_staffmeeting_list()
 
     def fill_staffmeeting_list(self):
         self.table.delete(*self.table.get_children())

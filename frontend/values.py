@@ -87,9 +87,9 @@ footnotes_special_education = [
     " Wskazać współwystępujące niepełnosprawności, o których mowa w lit. a–i.",
     " Wypełnia się w przypadku dziecka lub ucznia niepełnosprawnego.",
     " Wypełnia się w przypadkach, o których mowa w § 18 ust. 1 rozporządzenia"
-    " Ministra Edukacji Narodowej z dnia …….2017 r. w sprawie orzeczeń i opinii"
+    " Ministra Edukacji Narodowej z dnia 7 września 2017 r. w sprawie orzeczeń i opinii"
     " wydawanych przez zespoły orzekające działające w publicznych poradniach"
-    " psychologiczno­­-pedagogicznych (Dz. U. poz. …).",
+    " psychologiczno­­-pedagogicznych (Dz. U. poz. 1743).",
     " Wypełnia się w przypadku wydania nowego orzeczenia o potrzebie kształcenia"
     " specjalnego.",
     " Właściwe podkreślić."

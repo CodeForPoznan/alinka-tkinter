@@ -180,7 +180,7 @@ class DataBase():
             WHERE pesel=?
             ''', (pesel,)
             )
-        self.cur.exectute(
+        self.cur.execute(
             '''
             DELETE FROM staffmeeting
             WHERE student=?

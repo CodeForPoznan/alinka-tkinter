@@ -69,9 +69,23 @@ def staff_decree(document, value):
 
 def find_staff(values, specialization):
     list_of_staff = []
-    for i in values['staff']['team']:
-        if specialization in i[1]:
-            list_of_staff.append(i)
+    if specialization == "psycholog":    
+        for i in values['staff']['team']:
+            if specialization in i[1]:
+                list_of_staff.append(i)
+    elif specialization == "lekarz":
+        for i in values['staff']['team']:
+            if specialization in i[1]:
+                list_of_staff.append(i)
+    else:    
+        for i in values['staff']['team']:
+            if not (
+                "psycholog" in i[1] or
+                "lekarz" in i[1] or
+                "zespołu" in i[1]
+                ):
+                list_of_staff.append(i)
+
     choosen = random.choice(list_of_staff)
     name = choosen[0].split(' ')[1]
     if name[-1] == 'a':
@@ -88,6 +102,18 @@ def referent_speech(data):
         data[0][1],
         speech
         )
+
+def referent_speech1(data):
+    if data[1]:
+        speech = "zapoznał"
+    else:
+        speech = "zapoznała"
+    return "{} - {} {} ".format(
+        data[0][0],
+        data[0][1],
+        speech
+        )
+
 
 def text_with_tag(document, text, tag):
     # add line with text

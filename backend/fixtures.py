@@ -57,5 +57,6 @@ places = [
 ['Zespół Szkół Ponadgimnazjalnych w Grodzisku Wlkp.','technikum','ul. Żwirki i Wigury 2','62-065 Grodzisk Wlkp.'],
 ['Liceum Ogólnokształcące w Grodzisku Wlkp.','liceum ogólnokształcące','ul. 3 Maja 7','62-065 Grodzisk Wlkp'],
 ['Ośrodek Rehabilitacyjno - Edukacyjno Wychowawczy','inne','Sielinko, ul. Opalenicka 4','64-330 Opalenica'],
-['Specjalny Ośrodek Szkolno - Wychowawczy w Rydzynie','zasadnicza szkoła zawodowa','Plac Zamkowy 2','64-130 Rydzyna']
+['Specjalny Ośrodek Szkolno - Wychowawczy w Rydzynie','zasadnicza szkoła zawodowa','Plac Zamkowy 2','64-130 Rydzyna'],
+['-', 'inne', '-', '-']
 ]

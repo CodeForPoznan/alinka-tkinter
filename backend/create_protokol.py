@@ -10,6 +10,7 @@ from .decision_create import (
     normal_center,
     normal_left,
     referent_speech,
+    referent_speech1,
     staff_decree
     )
 from .styles import my_styles
@@ -40,7 +41,6 @@ class Protokol():
             "Na wniosek: ",
             self.values['applicant_g']
             )
-        add_line(self.document, 10)
         line_with_bold(
             self.document,
             "W sprawie: ",
@@ -48,13 +48,11 @@ class Protokol():
                 application_subject(self.values)
                 )
             )
-        add_line(self.document, 10)
         line_with_bold(
             self.document,
             "Imię i nazwisko: ",
             self.values['name_n']
             )
-        add_line(self.document, 10)
         line_with_bold(
             self.document,
             "Data i miejsce urodzenia: ",
@@ -63,13 +61,11 @@ class Protokol():
                 self.values['birth_place']
                 )
             )
-        add_line(self.document, 10)
         line_with_bold(
             self.document,
             "PESEL: ",
             self.values['pesel']
             )
-        add_line(self.document, 10)
         line_with_bold(
             self.document,
             "Adres zamieszkania dziecka: ",
@@ -79,7 +75,6 @@ class Protokol():
                 self.values['city']
                 )
             )
-        add_line(self.document, 10)
         line_with_bold(
             self.document,
             "Nazwa i adres przedszkola lub nazwa i adres szkoły oraz" 
@@ -106,10 +101,18 @@ class Protokol():
         normal_left(
             self.document,
             "Na posiedzeniu Zespół Orzekający przeprowadził postępowanie"
-            " orzekające (zapis dyskusji): ",
+            " orzekające (zapis dyskusji):\n ",
             size=12
             )
         add_line(self.document, 10)
+        normal_left(
+            self.document,
+            "Wnioskodawca został prawidłowo poinformowany o terminie posiedzenia"
+            "Zespołu orzekającego oraz o możliwości wzięcia w nim udziału"
+            " osobistego a także wskazanych specjalistów majacych wiedzę na temat"
+            " dziecka.",
+            size=10
+            )
         normal_left(
             self.document,
             referent_speech(find_staff(self.values, 'psycholog'))
@@ -117,6 +120,13 @@ class Protokol():
         normal_left(
             self.document,
             referent_speech(find_staff(self.values, 'pedagog'))
+            )
+        normal_left(
+            self.document,
+            "{} się z dokumentacją"
+            " i nie zgłasza zastrzeżeń".format(
+                referent_speech1(find_staff(self.values, 'lekarz'))
+                )
             )
         add_line(self.document, 10)
         normal_left(
@@ -127,9 +137,9 @@ class Protokol():
         normal_left(
             self.document,
             "Wyniki głosowania:\n"
-            "liczba głosów za: \n"
-            "liczba głosów przeciw: \n"
-            "liczba wstrzymujących się: \n"
+            "liczba głosów za: {}\n"
+            "liczba głosów przeciw: 0\n"
+            "liczba wstrzymujących się: 0\n".format(len(self.values['staff']['team']))
             )
         normal_left(
             self.document,

@@ -45,15 +45,18 @@ class Application(Labelframe):
         self.application_reason_lab = Label(self, text="Z uwagi na")
         self.application_reason_lab.grid(row=7, column=0, padx=5, pady=5, sticky='e')
         self.application_reason = Combobox(self, width=40, postcommand=self.get_reason, exportselection=False)
+        self.application_reason.bind('<<ComboboxSelected>>', self.clear_all_selection)
         self.application_reason.grid(row=7, column=1, columnspan=3, padx=5, pady=5)
         self.application_reason2_lab = Label(self, text="Z uwagi na")
         self.application_reason2_lab.grid(row=8, column=0, padx=5, pady=5, sticky='e')
         self.application_reason2 = Combobox(self, width=40, values=reasons)
+        self.application_reason2.bind('<<ComboboxSelected>>', self.clear_all_selection)
         self.application_reason2.grid(row=8, column=1, columnspan=3, padx=5, pady=5)
 
         self.timespan_lab = Label(self, text="Na okres")
         self.timespan_lab.grid(row=9, column=0, padx=5, pady=5, sticky='e')
         self.timespan = Combobox(self, values=timespan)
+        self.timespan.bind('<<ComboboxSelected>>', self.clear_all_selection)
         self.timespan.grid(row=9, column=1, pady=5, padx=5, sticky='w')
         self.timespan_ind = Entry(self, width=18)
         self.timespan_ind.grid(row=9, column=2, columnspan=2, padx=5, pady=5, sticky='w')
@@ -85,8 +88,16 @@ class Application(Labelframe):
             self.application_reason['values'] = reasons[:9]
             self.timespan_ind.config(state='disabled')
             self.timespan.config(state='active')
+            self.timespan['values'] = [timespan[4]]
             self.application_reason2.config(state='disabled')
+        self.application_subject.select_clear()
     
+    def clear_all_selection(self, event):
+        self.application_subject.select_clear()
+        self.application_reason.select_clear()
+        self.application_reason2.select_clear()
+        self.timespan.select_clear()
+
     def choosed_subject(self, event):
         actual_reason = self.application_reason.get()
         self.get_reason()

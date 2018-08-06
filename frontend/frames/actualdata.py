@@ -55,6 +55,7 @@ class StudentData(Labelframe):
         self.sort_of_school_lab = Label(self, text="Rodzaj szkoły")
         self.sort_of_school_lab.grid(row=6, column=0, sticky='e', padx=5, pady=5)
         self.sort_of_school_box = Combobox(self, postcommand=self.list_of_sorts, exportselection=False)
+        self.sort_of_school_box.bind("<<ComboboxSelected>>", self.clear_all_selection)
         self.sort_of_school_box.grid(row=6, column=1, sticky='w', padx=5, pady=5)
 
         self.school_lab = Label(self, text="Szkoła:")
@@ -76,10 +77,15 @@ class StudentData(Labelframe):
     def list_of_schools(self):
         sort = self.sort_of_school_box.get()
         self.school['values']=self.base.select_school(sort)
+        self.school.select_clear()
     
     def list_of_sorts(self):
         self.sort_of_school_box['values'] = self.base.sort_of_school()
     
+    def clear_all_selection(self, event):
+        self.school.select_clear()
+        self.sort_of_school_box.select_clear()
+
     def pesel_validation(self):
         # validation of number of digit
         pesel = str(self.pesel_string.get())

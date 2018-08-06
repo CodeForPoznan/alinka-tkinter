@@ -206,13 +206,17 @@ class MainWindow():
             student_id = self.notebook.table.item(item)['values'][2]
             staff_id = self.notebook.table.item(item)['values'][1]
             staffmeeting_data = self.base.get_staffmeeting_data(staff_id)
-            self.staff_meeting_frame.insert_staff(self.base, staffmeeting_data)
+            self.staff_meeting_frame.insert_staff(
+                self.base,
+                staffmeeting_data
+                )
             self.actual_student.insert_actual_data(
                 self.base.get_student_data(id=student_id)
                 )
             self.applicationframe.insert_application_data(
                 staffmeeting_data
                 )
+            self.applicationframe.get_reason()
     
     def select_student(self, event):
         choosen = self.notebook.student_list.selection()
@@ -225,7 +229,6 @@ class MainWindow():
         self.actual_student.insert_actual_data(student_data)
     
     def copy_address(self, event):
-        print("przepisuje")
         for i in [
                 self.applicationframe.city,
                 self.applicationframe.zip_code,
