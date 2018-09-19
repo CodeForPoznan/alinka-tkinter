@@ -1,0 +1,12 @@
+environment:
+
+  matrix:
+    - PYTHON: "C:\\Python36-x64"
+
+
+build_script:
+  install:
+    - cmd: >-
+    
+    pip install pylint
+    
