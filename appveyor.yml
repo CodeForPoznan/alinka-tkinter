@@ -1,7 +1,22 @@
-environment:
 
+
+build: false
+
+environment:
   matrix:
-    - PYTHON: "C:\\Python36-x64"
+    - PYTHON_INSTALL: "C:\\Python35"
+    - PYTHON_INSTALL: "C:\\Python36"
 
 install:
-  - "%PYTHON%\\python.exe -m pip install pylint
+  - set PATH=%PYTHON_INSTALL%;%PATH%
+  - set PATH=%PYTHON_INSTALL%\Scripts;%PATH%
+  - python --version
+  - pip --version
+  - pip install pylint
+  - pylint --version
+
+test_script:
+  - pylint main.py
+  
+  
+
