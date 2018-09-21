@@ -1,12 +1,22 @@
+
+build: false
+
 environment:
-
   matrix:
-    - PYTHON: "C:\\Python36-x64"
+    - PYTHON: "C:\\Python36"
+      PYTHON_VERSION: "3.6.4"
+      PYTHON_ARCH: "64"
 
+configuration: Release
 
-build_script:
-  install:
-    - cmd: >-
-    
-    pip install pylint
-    
+init:
+  - cmd: set PATH=%PYTHON%;%PYTHON%\scripts;%PATH%
+  - cmd: python --version
+  - cmd: pip --version
+  - pip install pylint
+  - pylint --version
+  - cmd: echo c:/projects/%APPVEYOR_BUILD_FOLDER%
+
+test_script:
+  - pylint %APPVEYOR_BUILD_FOLDER%
+  
