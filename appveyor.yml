@@ -1,17 +1,33 @@
 
 
-build: false
-
 environment:
   matrix:
-    - PYTHON: "C:\\Python36-x64"
+    - PYTHON: "C:\\Python36"
+      PYTHON_VERSION: "3.6.4"
+      PYTHON_ARCH: "64"
 
-install:
-  - set PATH=%PYTHON_INSTALL%;%PATH%
-  - set PATH=%PYTHON_INSTALL%\Scripts;%PATH%
-  - dir
-  - python --version
-  - pip --version
+configuration: Release
+
+init:
+  - cmd: ver
+  - cmd: ECHO Processor architecture - %PROCESSOR_ARCHITECTURE%
+  - cmd: wmic OS get OSArchitecture
+
+  # As AppVeyor has multiple python install, check which one uses by default
+  - cmd: ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH%
+  - cmd: python --version
+  - cmd: python -c "import struct; print(struct.calcsize('P') * 8)"
+  - cmd: python -c "import sys; print(sys.executable)"
+
+  # Set the relevant Python and pip location to the path
+  - cmd: set PATH=%PYTHON%;%PYTHON%\scripts;%PATH%
+  - cmd: ECHO Path - %PATH%
+
+  # Verify the new default python
+  - cmd: python --version
+  - cmd: python -c "import struct; print(struct.calcsize('P') * 8)"
+  - cmd: python -c "import sys; print(sys.executable)"
+  - cmd: pip --version
   - pip install pylint
   - pylint --version
 
