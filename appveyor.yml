@@ -4,8 +4,7 @@ build: false
 
 environment:
   matrix:
-    - PYTHON_INSTALL: "C:\\Python35"
-    - PYTHON_INSTALL: "C:\\Python36"
+    - PYTHON: "C:\\Python36-x64"
 
 install:
   - set PATH=%PYTHON_INSTALL%;%PATH%
