@@ -9,9 +9,9 @@ environment:
 install:
   - set PATH=%PYTHON_INSTALL%;%PATH%
   - set PATH=%PYTHON_INSTALL%\Scripts;%PATH%
-  - python --version
-  - pip --version
-  - pip install pylint
+  - python3 --version
+  - pip3 --version
+  - pip3 install pylint
   - pylint --version
 
 test_script:
