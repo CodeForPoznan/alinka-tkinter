@@ -17,4 +17,4 @@ init:
   - cmd: echo c:/projects/%APPVEYOR_BUILD_FOLDER%
 
 test_script:
-  - pylint c:/projects/%APPVEYOR_BUILD_FOLDER%
+  - pylint %APPVEYOR_BUILD_FOLDER%
