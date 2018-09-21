@@ -1,3 +1,4 @@
+
 build: false
 
 environment:
@@ -18,3 +19,4 @@ init:
 
 test_script:
   - pylint %APPVEYOR_BUILD_FOLDER%
+  
