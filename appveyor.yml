@@ -10,12 +10,12 @@ init:
   - cmd: set PATH=%PYTHON%;%PYTHON%\scripts;%PATH%
   - cmd: python --version
   - cmd: pip --version
-  - cmd: pip install pylint
-  - cmd: pip install cx_Freeze
+  - cmd: pip install pylint -q
+  - cmd: pip install cx_Freeze -q
   - cmd: pip freeze
 
 test_script:
-  # - pylint %APPVEYOR_BUILD_FOLDER%
+  # - pylint --confidence=INFERENCE %APPVEYOR_BUILD_FOLDER% 
 
 build_script:
   - cmd: python setup.py build
