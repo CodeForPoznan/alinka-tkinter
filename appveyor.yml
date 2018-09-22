@@ -1,4 +1,3 @@
-
 build: false
 
 environment:
@@ -6,17 +5,17 @@ environment:
     - PYTHON: "C:\\Python36"
       PYTHON_VERSION: "3.6.4"
       PYTHON_ARCH: "64"
-
-configuration: Release
-
+      
 init:
   - cmd: set PATH=%PYTHON%;%PYTHON%\scripts;%PATH%
   - cmd: python --version
   - cmd: pip --version
-  - pip install pylint
-  - pylint --version
-  - cmd: echo c:/projects/%APPVEYOR_BUILD_FOLDER%
+  - cmd: pip install pylint -q
+  - cmd: pip install cx_Freeze -q
 
 test_script:
-  - pylint %APPVEYOR_BUILD_FOLDER%
+  # - pylint --confidence=INFERENCE %APPVEYOR_BUILD_FOLDER% 
+
+build_script:
+  - cmd: python setup.py build
   
