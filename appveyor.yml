@@ -15,4 +15,7 @@ init:
   - cmd: pip freeze
 
 test_script:
-  - pylint %APPVEYOR_BUILD_FOLDER%
+  # - pylint %APPVEYOR_BUILD_FOLDER%
+
+build_script:
+  - cmd: python setup.py build
