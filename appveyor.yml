@@ -12,7 +12,6 @@ init:
   - cmd: pip --version
   - cmd: pip install pylint -q
   - cmd: pip install cx_Freeze -q
-  - cmd: pip freeze
 
 test_script:
   # - pylint --confidence=INFERENCE %APPVEYOR_BUILD_FOLDER% 
