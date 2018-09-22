@@ -5,7 +5,7 @@ environment:
     - PYTHON: "C:\\Python36"
       PYTHON_VERSION: "3.6.4"
       PYTHON_ARCH: "64"
-
+      
 init:
   - cmd: set PATH=%PYTHON%;%PYTHON%\scripts;%PATH%
   - cmd: python --version
@@ -18,3 +18,4 @@ test_script:
 
 build_script:
   - cmd: python setup.py build
+  
