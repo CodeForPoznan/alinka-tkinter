@@ -66,6 +66,11 @@ class DataBase():
             )
         self.conection.commit()
     
+    def empty_database(self):
+        '''Check if database is empty'''
+        self.cur.execute('''SELECT * FROM staff''')
+        return self.cur.fetchall()
+    
     def add_fake_data(self):
         for i in staff:
             self.cur.execute('''INSERT INTO staff VALUES(NULL, ?, ?)''', i)

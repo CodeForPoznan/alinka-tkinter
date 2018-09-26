@@ -26,7 +26,8 @@ from frontend.frames.studentdata import ListOfData
 class MainWindow():
     def __init__(self, window):
         self.base = DataBase('database.db')
-        # self.base.add_fake_data()
+        if not self.base.empty_database():
+            self.base.add_fake_data()
         self.window = window
         self.notebook = ListOfData(self.window, self.base, text="Baza danych")
         self.notebook.grid(row=0, column=0, rowspan=8, sticky='n', padx=5)
