@@ -4,3 +4,7 @@ env/
 .vscode/
 orzeczenia/
 database.db
+
+# PyCharm directory
+.idea/
+
