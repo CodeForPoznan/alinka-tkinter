@@ -1,15 +1,12 @@
-# pylint: disable=E1101, E0611
-
-from docx import Document
 from docx.enum.style import WD_STYLE_TYPE
-from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_PARAGRAPH_ALIGNMENT
+from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.shared import Pt
 
 
 def my_styles(document):
     '''
     Header - center, 12pt, bold
-    
+
     style for
 
     Zespół orzekajacy przy poradni...
@@ -17,7 +14,7 @@ def my_styles(document):
     '''
     Header_my = document.styles.add_style(
         'Header_my', WD_STYLE_TYPE.PARAGRAPH
-        )
+    )
     font = Header_my.font
     font.name = 'TimesNewRoman'
     font.size = Pt(12)
@@ -31,7 +28,7 @@ def my_styles(document):
 
     Small_my = document.styles.add_style(
         'Small_my', WD_STYLE_TYPE.PARAGRAPH
-        )
+    )
     font = Small_my.font
     font.name = 'TimesNewRoman'
     font.size = Pt(10)
@@ -48,14 +45,14 @@ def my_styles(document):
     '''
     Text_my = document.styles.add_style(
         'Text_my', WD_STYLE_TYPE.PARAGRAPH
-        )
+    )
     font = Text_my.font
     font.name = 'TimesNewRoman'
     font.size = Pt(10)
     font.bold = True
     justification = Text_my.paragraph_format
     justification.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    
+
     '''
     Tag_my - centered, 8pt, bold
 
@@ -65,7 +62,7 @@ def my_styles(document):
     '''
     Tag_my = document.styles.add_style(
         'Tag_my', WD_STYLE_TYPE.PARAGRAPH
-        )
+    )
     font = Tag_my.font
     font.name = 'TimesNewRoman'
     font.size = Pt(7)
@@ -78,7 +75,7 @@ def my_styles(document):
     '''
     Normal_center_my = document.styles.add_style(
         'Normal_center_my', WD_STYLE_TYPE.PARAGRAPH
-        )
+    )
     font = Normal_center_my.font
     font.name = 'TimesNewRoman'
     font.size = Pt(10)
@@ -91,7 +88,7 @@ def my_styles(document):
     '''
     Normal_right_my = document.styles.add_style(
         'Normal_right_my', WD_STYLE_TYPE.PARAGRAPH
-        )
+    )
     font = Normal_right_my.font
     font.name = 'TimesNewRoman'
     font.size = Pt(10)
@@ -104,7 +101,7 @@ def my_styles(document):
     '''
     Normal_left_my = document.styles.add_style(
         'Normal_left_my', WD_STYLE_TYPE.PARAGRAPH
-        )
+    )
     font = Normal_left_my.font
     font.name = 'TimesNewRoman'
     font.size = Pt(10)
@@ -117,7 +114,7 @@ def my_styles(document):
     '''
     Normal_justify_my = document.styles.add_style(
         'Normal_justify_my', WD_STYLE_TYPE.PARAGRAPH
-        )
+    )
     font = Normal_justify_my.font
     font.name = 'TimesNewRoman'
     font.size = Pt(10)
@@ -131,7 +128,7 @@ def my_styles(document):
 
     Przypisdolny = document.styles.add_style(
         'Przypisdolny', WD_STYLE_TYPE.PARAGRAPH
-        )
+    )
     font = Przypisdolny.font
     font.name = 'TimesNewRoman'
     font.size = Pt(7)
@@ -145,12 +142,12 @@ def my_styles(document):
 
     Normal_bold_my = document.styles.add_style(
         'Normal_bold_my', WD_STYLE_TYPE.PARAGRAPH
-        )
+    )
     font = Normal_bold_my.font
     font.name = 'TimesNewRoman'
     font.size = Pt(10)
     font.bold = True
     justification = Normal_bold_my.paragraph_format
     justification.alignment = WD_ALIGN_PARAGRAPH.LEFT
-   
+
     return document
