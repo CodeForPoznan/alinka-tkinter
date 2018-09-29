@@ -5,10 +5,10 @@ class ButtonFrame(Frame):
     def __init__(self, window, base, **kwargs):
         Frame.__init__(self, window, **kwargs)
         self.base = base
-        self.wheel = PhotoImage(file="wheel.png")
-        self.eraser = PhotoImage(file="eraser.png")
-        self.floppy = PhotoImage(file="floppy.png")
-        self.exit = PhotoImage(file="exit.png")
+        self.wheel = PhotoImage(file="./frontend/frames/wheel.png")
+        self.eraser = PhotoImage(file="./frontend/frames/eraser.png")
+        self.floppy = PhotoImage(file="./frontend/frames/floppy.png")
+        self.exit = PhotoImage(file="./frontend/frames/exit.png")
         self.font = font.Font(size=16)
         self.width = 31
         self.height = 31
