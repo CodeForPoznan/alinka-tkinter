@@ -17,3 +17,8 @@ test_script:
 
 build_script:
   - cmd: python setup.py build
+
+artifacts:
+  - path: build
+    name: alinka.zip
+    type: zip
