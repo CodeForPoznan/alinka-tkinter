@@ -18,6 +18,7 @@ from backend.create import Decision
 from backend.create_decree import Decree
 from backend.create_protokol import Protokol
 from frontend.frames.actualdata import StudentData
+from frontend.frames.buttons import ButtonFrame
 from frontend.frames.application import Application
 from frontend.frames.staffframe import StaffFrame
 from frontend.frames.studentdata import ListOfData
@@ -37,6 +38,17 @@ class MainWindow():
             '<<TreeviewSelect>>',
             self.select_student
         )
+       
+        self.button_frame = ButtonFrame(self.window, self.base)
+        self.button_frame.grid(row=2, column=1, columnspan=2)
+
+        self.button_frame.settings_button.bind('<Button-1>', self.settings)
+        self.button_frame.save_button.bind('<Button-1>',self.save_data_event)
+        self.button_frame.clear_button.bind('<Button-1>', self.clear)
+        self.button_frame.decision_create.bind('<Button-1>', self.issue_decision)
+        self.button_frame.decree_create.bind('<Button-1>', self.create_decree)
+        self.button_frame.protokol_create.bind('<Button-1>', self.create_protokol)
+        self.button_frame.close_button.bind('<Button-1>', self.close)
 
         self.actual_student = StudentData(
             self.window,
@@ -124,10 +136,14 @@ class MainWindow():
             self.base,
             staff={'team': [], 'id': ""}
         )
-
+ 
+        self.staff_meeting_frame.insert_staff(self.base, staff={'team' : [], 'id' : ""})
         self.fake_data()
         self.notebook.fill_student_list()
         self.notebook.fill_staffmeeting_list()
+
+    def save_data_event(self, event):
+        self.save_data()
 
     def save_data(self):
         '''
@@ -158,35 +174,38 @@ class MainWindow():
             # dodano nowy staffmeeting
         self.notebook.fill_student_list()
         self.notebook.fill_staffmeeting_list()
-
-    def clear(self):
+    
+    def clear(self, event):
         self.actual_student.clear()
         self.applicationframe.clear()
         self.staff_meeting_frame.clear()
+        
+    def issue_decision(self, event):
 
-    def issue_decision(self):
         if self.save_data():
             return
         create = Decision(self.values())
         create.issue()
         create.save()
         create.insert_footnotes()
+    
+    def create_decree(self, event):
 
-    def create_decree(self):
         if self.save_data():
             return
         create = Decree(self.values())
         create.create()
         create.save()
 
-    def create_protokol(self):
+    def create_protokol(self, event):
         if self.save_data():
             return
         create = Protokol(self.values())
         create.create()
         create.save()
+    
+    def close(self, event):
 
-    def close(self):
         self.window.destroy()
 
     def values(self):
@@ -430,6 +449,10 @@ class MainWindow():
         else:
             self.staff_meeting_frame.config(fg='red')
             return 1
+    
+    def settings(self, event):
+        '''Toplevel window for setup'''
+        pass
 
     def fake_data(self):
         self.actual_student.name_of_student_n_entry.insert(
