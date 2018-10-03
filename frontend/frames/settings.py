@@ -1,5 +1,5 @@
 from tkinter import Button, Frame, LabelFrame, Text, Toplevel
-from tkinter.font import Font 
+from tkinter.font import Font
 from tkinter.ttk import Treeview
 
 
@@ -22,7 +22,6 @@ class SettingsWindow():
             )
         self.name_accept_button.grid(row=1, column=0)
 
-        
         self.staff_label_frame = LabelFrame(self.window, text="Specjaliści")
         self.staff_label_frame.grid(row=1, column=0)
 
@@ -52,7 +51,7 @@ class SettingsWindow():
             text="Usuń"
             )
         self.delete_specialist_button.grid(row=0, column=2)
-        
+
         self.school_label_frame = LabelFrame(self.window, text="Szkoły")
         self.school_label_frame.grid(row=2, column=0)
 
