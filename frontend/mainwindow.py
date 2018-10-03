@@ -18,6 +18,7 @@ from backend.create import Decision
 from backend.create_decree import Decree
 from backend.create_protokol import Protokol
 from frontend.frames.actualdata import StudentData
+from frontend.frames.buttons import ButtonFrame
 from frontend.frames.application import Application
 from frontend.frames.staffframe import StaffFrame
 from frontend.frames.studentdata import ListOfData
@@ -46,7 +47,6 @@ class MainWindow():
         self.actual_student.grid(
             row=0,
             column=1,
-            columnspan=3,
             sticky='wn',
             padx=5
         )
@@ -54,7 +54,6 @@ class MainWindow():
         self.applicationframe.grid(
             row=1,
             column=1,
-            columnspan=3,
             sticky='w',
             padx=5
         )
@@ -66,68 +65,42 @@ class MainWindow():
         )
         self.staff_meeting_frame.grid(
             row=0,
-            column=4,
+            column=2,
             rowspan=2,
-            columnspan=3,
             sticky='w',
             padx=5
         )
-        self.add_to_base = Button(
-            self.window,
-            text="Zapisz",
-            width=14,
-            height=2,
-            command=self.save_data
-        )
-        self.add_to_base.grid(row=2, column=1, sticky='w')
-        self.clear_forms = Button(
-            self.window,
-            text="Wyczyść",
-            width=14,
-            height=2,
-            command=self.clear
-        )
-        self.clear_forms.grid(row=2, column=2, sticky='w')
-        self.create_decision = Button(
-            self.window,
-            text="Stwórz orzeczenie",
-            width=14,
-            height=2,
-            command=self.issue_decision
-        )
-        self.create_decision.grid(row=2, column=3, sticky='w')
-        self.create_protokol_button = Button(
-            self.window,
-            text="Stwórz zarządzenie",
-            width=14,
-            height=2,
-            command=self.create_decree
-        )
-        self.create_protokol_button.grid(row=2, column=4, sticky='w')
-        self.create_decree_button = Button(
-            self.window,
-            text="Stwórz protokół",
-            width=14,
-            height=2,
-            command=self.create_protokol
-        )
-        self.create_decree_button.grid(row=2, column=5, sticky='w')
-        self.close_button = Button(
-            self.window,
-            text="Zamknij",
-            width=14,
-            height=2,
-            command=self.close
-        )
-        self.close_button.grid(row=2, column=6, sticky='w')
+
         self.staff_meeting_frame.insert_staff(
             self.base,
             staff={'team': [], 'id': ""}
         )
 
+        self.button_frame = ButtonFrame(self.window, self.base)
+        self.button_frame.grid(row=2, column=1, columnspan=2)
+
+        self.button_frame.settings_button.bind('<Button-1>', self.settings)
+        self.button_frame.save_button.bind('<Button-1>', self.save_data_event)
+        self.button_frame.clear_button.bind('<Button-1>', self.clear)
+        self.button_frame.create_decision_button.bind(
+            '<Button-1>',
+            self.issue_decision
+        )
+        self.button_frame.create_decree_button.bind(
+            '<Button-1>',
+            self.create_decree
+        )
+        self.button_frame.create_protokol_button.bind(
+            '<Button-1>',
+            self.create_protokol
+        )
+        self.button_frame.close_button.bind('<Button-1>', self.close)
         self.fake_data()
         self.notebook.fill_student_list()
         self.notebook.fill_staffmeeting_list()
+
+    def save_data_event(self, event):
+        self.save_data()
 
     def save_data(self):
         '''
@@ -159,12 +132,12 @@ class MainWindow():
         self.notebook.fill_student_list()
         self.notebook.fill_staffmeeting_list()
 
-    def clear(self):
+    def clear(self, event):
         self.actual_student.clear()
         self.applicationframe.clear()
         self.staff_meeting_frame.clear()
 
-    def issue_decision(self):
+    def issue_decision(self, event):
         if self.save_data():
             return
         create = Decision(self.values())
@@ -172,21 +145,21 @@ class MainWindow():
         create.save()
         create.insert_footnotes()
 
-    def create_decree(self):
+    def create_decree(self, event):
         if self.save_data():
             return
         create = Decree(self.values())
         create.create()
         create.save()
 
-    def create_protokol(self):
+    def create_protokol(self, event):
         if self.save_data():
             return
         create = Protokol(self.values())
         create.create()
         create.save()
 
-    def close(self):
+    def close(self, event):
         self.window.destroy()
 
     def values(self):
@@ -431,6 +404,10 @@ class MainWindow():
             self.staff_meeting_frame.config(fg='red')
             return 1
 
+    def settings(self, event):
+        '''Toplevel window for setup'''
+        pass
+
     def fake_data(self):
         self.actual_student.name_of_student_n_entry.insert(
             'end',
@@ -448,12 +425,10 @@ class MainWindow():
             'end',
             'Zielona 29b/5'
         )
-
         self.actual_student.school['values'] = self.base.select_school(
             self.base.sort_of_school()[1]
         )
         self.actual_student.school.current(0)
-
         self.applicationframe.name_of_applicant_n.insert(
             'end',
             'Tomasz Rzeźniczak i Adelajda Kieł'

@@ -7,7 +7,7 @@ class StaffFrame(LabelFrame):
     """Contains data of staffmeeteng"""
 
     def __init__(self, window, base, **kwargs):
-        LabelFrame.__init__(self, window, **kwargs)
+        super().__init__(window, **kwargs)
         self.base = base
         self.staff_id = None
         self.all_staff = [x[0] for x in self.base.get_all_staff()]
