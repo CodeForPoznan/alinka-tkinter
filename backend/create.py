@@ -80,7 +80,7 @@ class Decision():
             "59 i 949)",
             size=9
         )
-        applicant(self.document, self.value["applicant_n"])
+        applicant(self.document, self.value["applicant_g"])
         staff(self.document, self.value)
         add_line(self.document, 12)
         normal_center(
