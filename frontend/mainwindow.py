@@ -1,4 +1,4 @@
-from tkinter import Button
+from tkinter import Button, Toplevel
 
 from .values import (
     footnotes_development_support,
@@ -20,6 +20,7 @@ from backend.create_protokol import Protokol
 from frontend.frames.actualdata import StudentData
 from frontend.frames.buttons import ButtonFrame
 from frontend.frames.application import Application
+from frontend.frames.settings import SettingsWindow
 from frontend.frames.staffframe import StaffFrame
 from frontend.frames.studentdata import ListOfData
 
@@ -406,7 +407,9 @@ class MainWindow():
 
     def settings(self, event):
         '''Toplevel window for setup'''
-        pass
+        new_window = Toplevel()
+        new_window.title("Ustawienia")
+        self.settings_window = SettingsWindow(new_window, self.base)
 
     def fake_data(self):
         self.actual_student.name_of_student_n_entry.insert(
