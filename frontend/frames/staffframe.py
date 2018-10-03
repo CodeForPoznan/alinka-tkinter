@@ -85,7 +85,7 @@ class StaffFrame(LabelFrame):
         self.tables_tidying()
 
     def on_listbox_select(self, event):
-        if not isinstance(self.table.selection(), str):
+        if isinstance(self.table.selection(), str):
             self.table.selection_remove(self.table.selection()[0])
 
     def on_treeview_selected(self, event):
