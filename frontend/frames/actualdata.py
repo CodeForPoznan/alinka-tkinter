@@ -215,13 +215,23 @@ class StudentData(Labelframe):
             return 1
 
     def birth_data_from_pesel(self, pesel):
-        year = ""
-        if pesel[0] in ["0", "1"]:
-            year = "20" + pesel[0:2]
-            month = str(int(pesel[2:4]) - 20)
-        elif pesel[0] in ["7", "8", "9"]:
+        if pesel[2] in ["0", "1"]:
             year = "19" + pesel[0:2]
             month = pesel[2:4]
+        elif pesel[2] in ["2", "3"]:
+            year = "20" + pesel[0:2]
+            month = str(int(pesel[2:4]) - 20)
+        elif pesel[2] in ["4", "5"]:
+            year = "21" + pesel[0:2]
+            month = str(int(pesel[2:4]) - 40)
+        elif pesel[2] in ["6", "7"]:
+            year = "22" + pesel[0:2]
+            month = str(int(pesel[2:4]) - 60)
+        elif pesel[2] in ["8", "9"]:
+            year = "18" + pesel[0:2]
+            month = str(int(pesel[2:4]) - 80)
+        else:
+            return "wrong PESEL"
         day = pesel[4:6]
         return ".".join([day, month, year])
 
