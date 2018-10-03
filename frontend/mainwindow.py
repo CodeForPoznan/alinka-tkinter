@@ -1,4 +1,4 @@
-from tkinter import Button, Toplevel
+from tkinter import Button
 
 from .values import (
     footnotes_development_support,
@@ -11,19 +11,21 @@ from .values import (
     recommend_individual_preschool,
     recommend_profound,
     recommend_special_education
-    )
+)
 
 from backend.database import DataBase
 from backend.create import Decision
 from backend.create_decree import Decree
 from backend.create_protokol import Protokol
 from frontend.frames.actualdata import StudentData
+from frontend.frames.buttons import ButtonFrame
 from frontend.frames.application import Application
 from frontend.frames.staffframe import StaffFrame
 from frontend.frames.studentdata import ListOfData
 
 
 class MainWindow():
+
     def __init__(self, window):
         self.base = DataBase('database.db')
         if not self.base.empty_database():
@@ -32,33 +34,73 @@ class MainWindow():
         self.notebook = ListOfData(self.window, self.base, text="Baza danych")
         self.notebook.grid(row=0, column=0, rowspan=8, sticky='n', padx=5)
         self.notebook.table.bind('<<TreeviewSelect>>', self.select_meeting)
-        self.notebook.student_list.bind('<<TreeviewSelect>>', self.select_student)
+        self.notebook.student_list.bind(
+            '<<TreeviewSelect>>',
+            self.select_student
+        )
 
-        self.actual_student = StudentData(self.window, self.base, text="Dane dziecka")
-        self.actual_student.grid(row=0, column=1, columnspan=3, sticky='wn', padx=5)
+        self.actual_student = StudentData(
+            self.window,
+            self.base,
+            text="Dane dziecka"
+        )
+        self.actual_student.grid(
+            row=0,
+            column=1,
+            sticky='wn',
+            padx=5
+        )
         self.applicationframe = Application(self.window, text="Wnioskodawcy")
-        self.applicationframe.grid(row=1, column=1, columnspan=3, sticky='w', padx=5)
+        self.applicationframe.grid(
+            row=1,
+            column=1,
+            sticky='w',
+            padx=5
+        )
         self.applicationframe.same.bind('<Button-1>', self.copy_address)
-        self.staff_meeting_frame = StaffFrame(self.window, self.base, text="Zespół orzekający")
-        self.staff_meeting_frame.grid(row=0, column=4, rowspan=2, columnspan=3, sticky='w', padx=5)
-        self.add_to_base = Button(self.window, text="Zapisz", width=14, height=2, command=self.save_data)
-        self.add_to_base.grid(row=2, column=1, sticky='w')
-        self.clear_forms = Button(self.window, text="Wyczyść", width=14, height=2, command=self.clear)
-        self.clear_forms.grid(row=2, column=2, sticky='w')
-        self.create_decision = Button(self.window, text="Stwórz orzeczenie", width=14, height=2, command=self.issue_decision)
-        self.create_decision.grid(row=2, column=3, sticky='w')
-        self.create_protokol_button = Button(self.window, text="Stwórz zarządzenie", width=14, height=2, command=self.create_decree)
-        self.create_protokol_button.grid(row=2, column=4, sticky='w')
-        self.create_decree_button = Button(self.window, text="Stwórz protokół", width=14, height=2, command=self.create_protokol)
-        self.create_decree_button.grid(row=2, column=5, sticky='w')
-        self.close_button = Button(self.window, text="Zamknij", width=14, height=2, command=self.close)
-        self.close_button.grid(row=2, column=6, sticky='w')
-        self.staff_meeting_frame.insert_staff(self.base, staff={'team' : [], 'id' : ""})
+        self.staff_meeting_frame = StaffFrame(
+            self.window,
+            self.base,
+            text="Zespół orzekający"
+        )
+        self.staff_meeting_frame.grid(
+            row=0,
+            column=2,
+            rowspan=2,
+            sticky='w',
+            padx=5
+        )
 
+        self.staff_meeting_frame.insert_staff(
+            self.base,
+            staff={'team': [], 'id': ""}
+        )
 
+        self.button_frame = ButtonFrame(self.window, self.base)
+        self.button_frame.grid(row=2, column=1, columnspan=2)
+
+        self.button_frame.settings_button.bind('<Button-1>', self.settings)
+        self.button_frame.save_button.bind('<Button-1>', self.save_data_event)
+        self.button_frame.clear_button.bind('<Button-1>', self.clear)
+        self.button_frame.create_decision_button.bind(
+            '<Button-1>',
+            self.issue_decision
+        )
+        self.button_frame.create_decree_button.bind(
+            '<Button-1>',
+            self.create_decree
+        )
+        self.button_frame.create_protokol_button.bind(
+            '<Button-1>',
+            self.create_protokol
+        )
+        self.button_frame.close_button.bind('<Button-1>', self.close)
         self.fake_data()
         self.notebook.fill_student_list()
         self.notebook.fill_staffmeeting_list()
+
+    def save_data_event(self, event):
+        self.save_data()
 
     def save_data(self):
         '''
@@ -69,22 +111,18 @@ class MainWindow():
         valid_staff_cont = self.validate_staffmeeting_content()
         if (valid_staff_cont or valid_student_cont):
             return 1
-        
+
         values = self.values()
-        '''
-        Update/Create student
-        '''
+
+        # Update/Create student
         if not self.base.pesel_exists(values['pesel']):
             self.base.add_student_to_db(self.values())
         else:
             self.base.update_student(self.values())
-        '''
-        Update/create staffmeeting
 
-        Staffmeeting is reconized as "the same" if its date,
-        student and subject is the same
-
-        '''
+        # Update/create staffmeeting
+        # Staffmeeting is reconized as "the same" if its date,
+        # student and subject is the same
         if self.base.staffmeeting_exists(values):
             self.base.update_staffmeeting(values)
             # zaktualizowano staffmeeting
@@ -93,116 +131,113 @@ class MainWindow():
             # dodano nowy staffmeeting
         self.notebook.fill_student_list()
         self.notebook.fill_staffmeeting_list()
-    
-    def clear(self):
+
+    def clear(self, event):
         self.actual_student.clear()
         self.applicationframe.clear()
         self.staff_meeting_frame.clear()
-        
-    def issue_decision(self):
+
+    def issue_decision(self, event):
         if self.save_data():
             return
         create = Decision(self.values())
         create.issue()
         create.save()
         create.insert_footnotes()
-    
-    def create_decree(self):
+
+    def create_decree(self, event):
         if self.save_data():
             return
         create = Decree(self.values())
         create.create()
         create.save()
 
-    def create_protokol(self):
+    def create_protokol(self, event):
         if self.save_data():
             return
         create = Protokol(self.values())
         create.create()
         create.save()
-    
-    def close(self):
+
+    def close(self, event):
         self.window.destroy()
-    
+
     def values(self):
-        return dict(
-            zip(
-                [
-                    "name_n",
-                    "name_g",
-                    "zip_code",
-                    "city",
-                    "address",
-                    "pesel",
-                    "birth_date",
-                    "birth_place",
-                    "casebook",
-                    "subject",
-                    "reason",
-                    "applicant_n",
-                    "applicant_g",
-                    "applicant_zipcode",
-                    "applicant_city",
-                    "applicant_address",
-                    "timespan",
-                    "timespan_ind",
-                    "staff_id",
-                    "staff_meeting_date",
-                    "staff",
-                    "school_name",
-                    "school_sort",
-                    "school_address",
-                    "school_city",
-                    "class",
-                    "profession",
-                    "recommendations",
-                    "footnotes"
-                ],
-                [
-                    self.actual_student.name_of_student_n_entry.get(),
-                    self.actual_student.name_of_student_g_entry.get(),
-                    self.actual_student.zip_code_of_student_entry.get(),
-                    self.actual_student.city_of_student_entry.get(),
-                    self.actual_student.address_of_student_entry.get(),
-                    self.actual_student.pesel_entry.get(),
-                    self.actual_student.birth_date,
-                    self.actual_student.birth_place_entry.get(),
-                    self.actual_student.id_of_student_entry.get(),
-                    self.applicationframe.application_subject.get(),
-                    self.get_disability(
-                        self.applicationframe.application_reason.get(),
-                        self.applicationframe.application_reason2.get()
-                        ),
-                    self.applicationframe.name_of_applicant_n.get(),
-                    self.applicationframe.name_of_applicant_g.get(),
-                    self.applicationframe.zip_code.get(),
-                    self.applicationframe.city.get(),
-                    self.applicationframe.address.get(),
-                    self.applicationframe.timespan.get(),
-                    self.applicationframe.timespan_ind.get(),
-                    self.staff_meeting_frame.staff_id,
-                    self.staff_meeting_frame.data_entry.get(),
-                    self.staff_list(),
-                    self.base.get_school(self.actual_student.school.get())[1],
-                    self.base.get_school(self.actual_student.school.get())[2],
-                    self.base.get_school(self.actual_student.school.get())[3],
-                    self.base.get_school(self.actual_student.school.get())[4],
-                    self.actual_student.class_entry.get(),
-                    self.actual_student.profession_entry.get(),
-                    self.get_form_data(
-                        self.applicationframe.application_subject.get()
-                        )[0],
-                    self.get_form_data(
-                        self.applicationframe.application_subject.get()
-                        )[1]
-                ]
-            )
-        )
+        return dict(zip([
+            "name_n",
+            "name_g",
+            "zip_code",
+            "city",
+            "address",
+            "pesel",
+            "birth_date",
+            "birth_place",
+            "casebook",
+            "subject",
+            "reason",
+            "applicant_n",
+            "applicant_g",
+            "applicant_zipcode",
+            "applicant_city",
+            "applicant_address",
+            "timespan",
+            "timespan_ind",
+            "staff_id",
+            "staff_meeting_date",
+            "staff",
+            "school_name",
+            "school_sort",
+            "school_address",
+            "school_city",
+            "class",
+            "profession",
+            "recommendations",
+            "footnotes"
+        ], [
+            self.actual_student.name_of_student_n_entry.get(),
+            self.actual_student.name_of_student_g_entry.get(),
+            self.actual_student.zip_code_of_student_entry.get(),
+            self.actual_student.city_of_student_entry.get(),
+            self.actual_student.address_of_student_entry.get(),
+            self.actual_student.pesel_entry.get(),
+            self.actual_student.birth_date,
+            self.actual_student.birth_place_entry.get(),
+            self.actual_student.id_of_student_entry.get(),
+            self.applicationframe.application_subject.get(),
+            self.get_disability(
+                self.applicationframe.application_reason.get(),
+                self.applicationframe.application_reason2.get()
+            ),
+            self.applicationframe.name_of_applicant_n.get(),
+            self.applicationframe.name_of_applicant_g.get(),
+            self.applicationframe.zip_code.get(),
+            self.applicationframe.city.get(),
+            self.applicationframe.address.get(),
+            self.applicationframe.timespan.get(),
+            self.applicationframe.timespan_ind.get(),
+            self.staff_meeting_frame.staff_id,
+            self.staff_meeting_frame.data_entry.get(),
+            self.staff_list(),
+            self.base.get_school(self.actual_student.school.get())[1],
+            self.base.get_school(self.actual_student.school.get())[2],
+            self.base.get_school(self.actual_student.school.get())[3],
+            self.base.get_school(self.actual_student.school.get())[4],
+            self.actual_student.class_entry.get(),
+            self.actual_student.profession_entry.get(),
+            self.get_form_data(
+                self.applicationframe.application_subject.get()
+            )[0],
+            self.get_form_data(
+                self.applicationframe.application_subject.get()
+            )[1]
+        ]))
 
     def select_meeting(self, event):
         '''insert selected staffmeeting into form'''
         item = self.notebook.table.selection()
-        parent = self.notebook.table.item(self.notebook.table.parent(item))['values']
+        parent = self.notebook.table.item(
+            self.notebook.table.parent(item)
+        )['values']
         if parent:
             student_id = self.notebook.table.item(item)['values'][2]
             staff_id = self.notebook.table.item(item)['values'][1]
@@ -210,63 +245,62 @@ class MainWindow():
             self.staff_meeting_frame.insert_staff(
                 self.base,
                 staffmeeting_data
-                )
+            )
             self.actual_student.insert_actual_data(
                 self.base.get_student_data(id=student_id)
-                )
+            )
             self.applicationframe.insert_application_data(
                 staffmeeting_data
-                )
+            )
             self.applicationframe.get_reason()
-    
+
     def select_student(self, event):
         choosen = self.notebook.student_list.selection()
-        student_pesel = str(self.notebook.student_list.item(choosen)['values'][1])
+        student_pesel = str(
+            self.notebook.student_list.item(choosen)['values'][1]
+        )
         if len(student_pesel) == 10:
             student_pesel = '0' + student_pesel
         elif len(student_pesel) == 9:
             student_pesel = '00' + student_pesel
         student_data = self.base.get_student_data(pesel=student_pesel)
         self.actual_student.insert_actual_data(student_data)
-    
+
     def copy_address(self, event):
         for i in [
                 self.applicationframe.city,
                 self.applicationframe.zip_code,
                 self.applicationframe.address
-            ]:
+        ]:
             i.delete(0, 'end')
-        for x,y in zip(
-            [
-                self.applicationframe.city,
-                self.applicationframe.zip_code,
-                self.applicationframe.address
-            ],
-            [
-                self.actual_student.city_of_student_entry,
-                self.actual_student.zip_code_of_student_entry,
-                self.actual_student.address_of_student_entry
-            ]
-            ):
+        for x, y in zip([
+            self.applicationframe.city,
+            self.applicationframe.zip_code,
+            self.applicationframe.address
+        ], [
+            self.actual_student.city_of_student_entry,
+            self.actual_student.zip_code_of_student_entry,
+            self.actual_student.address_of_student_entry
+        ]):
             x.insert('end', y.get())
-        
+
     def staff_list(self):
         staff_meeting_list = {'team': []}
         if (
-            (not self.staff_meeting_frame.data_entry.get())
-            or 
+            (not self.staff_meeting_frame.data_entry.get()) or
             (not self.staff_meeting_frame.table.get_children())
-            ):
+        ):
             # niewypełniony staff
             return staff_meeting_list
-        '''Construct list of staff with specialization'''
+
+        # Construct list of staff with specialization
         staff_meeting_list = {'team': []}
         for child in self.staff_meeting_frame.table.get_children():
             staff_meeting_list['team'].append(
                 self.staff_meeting_frame.table.item(child)["values"]
-                )
-        
-        '''Check sex of leader of the team'''
+            )
+
+        # Check sex of leader of the team
         if staff_meeting_list['team'][0][0].split(' ')[1][-1] == 'a':
             staff_meeting_list['team'][0][1] = "przewodnicząca zespołu"
         else:
@@ -280,65 +314,59 @@ class MainWindow():
             return [disability1, disability1, ""]
         if disability1 != "" and disability2 != "":
             return ["sprzężona", disability1, disability2]
-    
-    def get_form_data(self, application_subject):
-        if application_subject == "kształcenie specjalne":
+
+    def get_form_data(self, subject):
+        if subject == "kształcenie specjalne":
             return [
                 recommend_special_education,
                 footnotes_special_education
-                ]
-        elif application_subject == "indywidualne roczne przygotowanie przedszkolne":
+            ]
+        if subject == "indywidualne roczne przygotowanie przedszkolne":
             return [
                 recommend_individual_preschool,
                 footnotes_individual_preschool
-                ]
-        elif application_subject == "indywidualne nauczanie":
+            ]
+        if subject == "indywidualne nauczanie":
             return [
                 recommend_individual,
                 footnotes_individual
-                ]
-        elif application_subject == "wczesne wspomaganie rozwoju":
+            ]
+        if subject == "wczesne wspomaganie rozwoju":
             return [
                 recommend_development_support,
                 footnotes_development_support
-                ]
-        elif application_subject == "zajęcia rewalidacyjno-wychowawcze indywidualne":
+            ]
+        if subject == "zajęcia rewalidacyjno-wychowawcze indywidualne":
             return [
                 recommend_profound,
                 footnotes_profound
-                ]
-        elif application_subject == "zajęcia rewalidacyjno-wychowawcze zespołowe":
+            ]
+        if subject == "zajęcia rewalidacyjno-wychowawcze zespołowe":
             return [
                 recommend_profound,
                 footnotes_profound
-                ]
-        else:
-            return [[],[]]
-    
-    
+            ]
+        return [[], []]
+
     def validate_student_content(self):
         returned_value = 0
-        for i, j in zip(
-            [
-                self.actual_student.name_of_student_n_entry,
-                self.actual_student.name_of_student_g_entry,
-                self.actual_student.id_of_student_entry,
-                self.actual_student.birth_place_entry,
-                self.actual_student.school,
-                self.applicationframe.application_subject,
-                self.applicationframe.application_reason
-
-                ],
-            [
-                self.actual_student.name_of_student_n_lab,
-                self.actual_student.name_of_student_g_lab,
-                self.actual_student.id_of_student,
-                self.actual_student.birth_place_lab,
-                self.actual_student.school_lab,
-                self.applicationframe.application_subject_lab,
-                self.applicationframe.application_reason_lab                
-                ]
-            ):
+        for i, j in zip([
+            self.actual_student.name_of_student_n_entry,
+            self.actual_student.name_of_student_g_entry,
+            self.actual_student.id_of_student_entry,
+            self.actual_student.birth_place_entry,
+            self.actual_student.school,
+            self.applicationframe.application_subject,
+            self.applicationframe.application_reason
+        ], [
+            self.actual_student.name_of_student_n_lab,
+            self.actual_student.name_of_student_g_lab,
+            self.actual_student.id_of_student,
+            self.actual_student.birth_place_lab,
+            self.actual_student.school_lab,
+            self.applicationframe.application_subject_lab,
+            self.applicationframe.application_reason_lab
+        ]):
             if not i.get():
                 j.config(fg='red')
                 returned_value = 1
@@ -347,8 +375,9 @@ class MainWindow():
 
         if self.actual_student.pesel_validation():
             returned_value = 1
-        
-        if self.applicationframe.application_subject.get() == "kształcenie specjalne":
+
+        if self.applicationframe.application_subject.get() == \
+                "kształcenie specjalne":
             if not self.applicationframe.timespan.get():
                 self.applicationframe.timespan_lab.config(fg='red')
                 returned_value = 1
@@ -357,42 +386,59 @@ class MainWindow():
         elif self.applicationframe.application_subject.get() in [
             "indywidualne roczne przygotowanie przedszkolne",
             "indywidualne nauczanie"
-            ]:
+        ]:
             if not self.applicationframe.timespan_ind.get():
                 self.applicationframe.timespan_lab.config(fg='red')
                 returned_value = 1
-    
+
         return returned_value
-    
+
     def validate_staffmeeting_content(self):
         if (
             self.staff_meeting_frame.data_entry.get() and
             self.staff_meeting_frame.table.get_children()
-            ):
+        ):
             self.staff_meeting_frame.config(fg='black')
             return 0
         else:
             self.staff_meeting_frame.config(fg='red')
             return 1
 
+    def settings(self, event):
+        '''Toplevel window for setup'''
+        pass
+
     def fake_data(self):
-        self.actual_student.name_of_student_n_entry.insert('end', 'Jakub Rzeźniczak')
-        self.actual_student.name_of_student_g_entry.insert('end', 'Jakuba Rzeźniczaka')
+        self.actual_student.name_of_student_n_entry.insert(
+            'end',
+            'Jakub Rzeźniczak'
+        )
+        self.actual_student.name_of_student_g_entry.insert(
+            'end',
+            'Jakuba Rzeźniczaka'
+        )
         self.actual_student.pesel_string.set("76020707430")
         self.actual_student.zip_code_of_student_entry.insert('end', '65-898')
         self.actual_student.city_of_student_entry.insert('end', 'Ugody')
         self.actual_student.birth_place_entry.insert('end', 'Trąbowo Dolne')
-        self.actual_student.address_of_student_entry.insert('end', 'Zielona 29b/5')
-        
-        self.actual_student.school['values'] = self.base.select_school(self.base.sort_of_school()[1])
+        self.actual_student.address_of_student_entry.insert(
+            'end',
+            'Zielona 29b/5'
+        )
+        self.actual_student.school['values'] = self.base.select_school(
+            self.base.sort_of_school()[1]
+        )
         self.actual_student.school.current(0)
-
-        self.applicationframe.name_of_applicant_n.insert('end', 'Tomasz Rzeźniczak i Adelajda Kieł')
-        self.applicationframe.name_of_applicant_g.insert('end', 'Tomasza Rzeźniczaka i Adelajdy Kieł')
+        self.applicationframe.name_of_applicant_n.insert(
+            'end',
+            'Tomasz Rzeźniczak i Adelajda Kieł'
+        )
+        self.applicationframe.name_of_applicant_g.insert(
+            'end',
+            'Tomasza Rzeźniczaka i Adelajdy Kieł'
+        )
         self.applicationframe.zip_code.insert('end', '65-898')
         self.applicationframe.city.insert('end', 'Ugody')
         self.applicationframe.address.insert('end', 'Zielona 29b/5')
         self.applicationframe.application_subject.current(0)
-        # self.applicationframe.application_reason.current(0)
         self.applicationframe.timespan.current(1)
-    
