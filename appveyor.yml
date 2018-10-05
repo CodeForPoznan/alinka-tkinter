@@ -10,7 +10,7 @@ init:
   - cmd: set PATH=%PYTHON%;%PYTHON%\scripts;%PATH%
   - cmd: python --version
   - cmd: pip --version
-  - cmd: pip install pycodestyle cx_Freeze
+  - cmd: pip install pycodestyle python-docx cx_Freeze
 
 test_script:
   - cmd: pycodestyle . --exclude=backend/data_xml.py
@@ -19,6 +19,6 @@ build_script:
   - cmd: python setup.py build
 
 artifacts:
-  - path: build
-    name: alinka.zip
+  - path: build/exe.win32-3.6
+    name: alinka
     type: zip
