@@ -7,7 +7,6 @@ class SettingsWindow():
     '''Toplevel widget for settings - name of center, specialist, schools'''
     def __init__(self, window, base, **kwargs):
         self.window = window
-        # self.grid =
         self.base = base
         self.my_font = Font(size=16)
 
@@ -19,7 +18,7 @@ class SettingsWindow():
         self.name_accept_button = Button(
             self.name_label_frame,
             text="Zachowaj"
-            )
+        )
         self.name_accept_button.grid(row=1, column=0)
 
         self.staff_label_frame = LabelFrame(self.window, text="Specjaliści")
@@ -28,7 +27,7 @@ class SettingsWindow():
         self.staff_table = Treeview(
             self.staff_label_frame,
             columns=("name", "speciality")
-            )
+        )
         self.staff_table.grid(row=0, column=0)
         self.staff_table.heading("#1", text="imię i nazwisko")
         self.staff_table.heading('#2', text="specjalizacja")
@@ -44,12 +43,12 @@ class SettingsWindow():
         self.edit_specialist_button = Button(
             self.staff_buttons,
             text="Edytuj"
-            )
+        )
         self.edit_specialist_button.grid(row=0, column=1)
         self.delete_specialist_button = Button(
             self.staff_buttons,
             text="Usuń"
-            )
+        )
         self.delete_specialist_button.grid(row=0, column=2)
 
         self.school_label_frame = LabelFrame(self.window, text="Szkoły")
@@ -58,7 +57,7 @@ class SettingsWindow():
         self.school_table = Treeview(
             self.school_label_frame,
             columns=("name", "sort")
-            )
+        )
         self.school_table.grid(row=0, column=0)
         self.school_table.heading("#1", text="nazwa szkoły")
         self.school_table.heading('#2', text="rodzaj szkoły")
@@ -82,7 +81,7 @@ class SettingsWindow():
             font=self.my_font,
             width=20,
             command=self.close
-            )
+        )
         self.close_button.grid(row=3, column=0)
 
     def close(self):
