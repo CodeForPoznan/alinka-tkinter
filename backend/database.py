@@ -1,85 +1,97 @@
-from collections import OrderedDict
 import sqlite3
+from collections import OrderedDict
+from os.path import abspath, dirname, isfile, join
 
-from .fixtures import staff, places
+from peewee import Model, SqliteDatabase, TextField
+
+from backend.fixtures import staff, places
 
 
-class DataBase():
+DB_PATH = join(dirname(dirname(abspath(__file__))), 'database.db')
+DB = SqliteDatabase(DB_PATH)
 
-    def __init__(self, dbase):
-        self.conection = sqlite3.connect(dbase)
+
+class Staff(Model):
+
+    class Meta:
+        database = DB
+
+    name = TextField()
+    speciality = TextField()
+
+
+class DataBase:
+
+    def __init__(self):
+        self.empty_database = not isfile(DB_PATH)
+        self.conection = sqlite3.connect(DB_PATH)
         self.cur = self.conection.cursor()
-        self.cur.execute(
-            '''CREATE TABLE IF NOT EXISTS student (
-            id INTEGER PRIMARY KEY,
-            name_n TEXT,
-            name_g TEXT,
-            zip_code TEXT,
-            city TEXT,
-            address TEXT,
-            pesel TEXT UNIQUE,
-            birth_date TEXT,
-            birth_place TEXT,
-            casebook TEXT,
-            school_name TEXT,
-            school_sort TEXT,
-            school_address TEXT,
-            school_city TEXT,
-            class TEXT,
-            profession TEXT
-            )'''
-        )
-        self.cur.execute(
-            '''CREATE TABLE IF NOT EXISTS staff (
-            id INTEGER PRIMARY KEY,
-            name TEXT,
-            speciality TEXT
-            )'''
-        )
-        self.cur.execute(
-            '''CREATE TABLE IF NOT EXISTS staffmeeting (
-            id INTEGER PRIMARY KEY,
-            date TEXT,
-            member1 INTEGER,
-            member2 INTEGER,
-            member3 INTEGER,
-            member4 INTEGER,
-            member5 INTEGER,
-            member6 INTEGER,
-            member7 INTEGER,
-            member8 INTEGER,
-            member9 INTEGER,
-            subject TEXT,
-            reason TEXT,
-            applicant_n TEXT,
-            applicant_g TEXT,
-            applicant_zipcode TEXT,
-            applicant_city TEXT,
-            applicant_address TEXT,
-            timespan TEXT,
-            timespan_ind TEXT,
-            student INTEGER
-            )'''
-        )
-        self.cur.execute(
-            '''CREATE TABLE IF NOT EXISTS school (
-            id INTEGER PRIMARY KEY,
-            name TEXT,
-            sort TEXT,
-            address TEXT,
-            zipcode TEXT
-            )'''
-        )
-        self.conection.commit()
 
-    def empty_database(self):
-        '''Check if database is empty'''
-        self.cur.execute('''SELECT * FROM staff''')
-        return self.cur.fetchall()
+        if self.empty_database:
+            self.cur.execute(
+                '''CREATE TABLE IF NOT EXISTS student (
+                id INTEGER PRIMARY KEY,
+                name_n TEXT,
+                name_g TEXT,
+                zip_code TEXT,
+                city TEXT,
+                address TEXT,
+                pesel TEXT UNIQUE,
+                birth_date TEXT,
+                birth_place TEXT,
+                casebook TEXT,
+                school_name TEXT,
+                school_sort TEXT,
+                school_address TEXT,
+                school_city TEXT,
+                class TEXT,
+                profession TEXT
+                )'''
+            )
+
+            DB.connect()
+            DB.create_tables([Staff])
+
+            self.cur.execute(
+                '''CREATE TABLE IF NOT EXISTS staffmeeting (
+                id INTEGER PRIMARY KEY,
+                date TEXT,
+                member1 INTEGER,
+                member2 INTEGER,
+                member3 INTEGER,
+                member4 INTEGER,
+                member5 INTEGER,
+                member6 INTEGER,
+                member7 INTEGER,
+                member8 INTEGER,
+                member9 INTEGER,
+                subject TEXT,
+                reason TEXT,
+                applicant_n TEXT,
+                applicant_g TEXT,
+                applicant_zipcode TEXT,
+                applicant_city TEXT,
+                applicant_address TEXT,
+                timespan TEXT,
+                timespan_ind TEXT,
+                student INTEGER
+                )'''
+            )
+            self.cur.execute(
+                '''CREATE TABLE IF NOT EXISTS school (
+                id INTEGER PRIMARY KEY,
+                name TEXT,
+                sort TEXT,
+                address TEXT,
+                zipcode TEXT
+                )'''
+            )
+            self.add_fake_data()
+            self.conection.commit()
 
     def add_fake_data(self):
         for i in staff:
-            self.cur.execute('''INSERT INTO staff VALUES(NULL, ?, ?)''', i)
+            Staff(**i).save()
         for i in places:
             self.cur.execute(
                 '''INSERT INTO school VALUES(NULL, ?, ?, ?, ?)''', i
@@ -307,10 +319,6 @@ class DataBase():
         self.cur.execute('''SELECT * FROM staffmeeting''')
         return self.cur.fetchall()
 
-    def get_all_staff(self):
-        self.cur.execute('''SELECT name, speciality FROM staff''')
-        return self.cur.fetchall()
-
     def select_meeting(self, id):
         '''select meeting from list of staffmeetings'''
 
@@ -333,34 +341,6 @@ class DataBase():
         a = self.cur.fetchone()
         return a[0]
 
-    def who_is(self, id):
-        '''select list contains name and speciality refering to
-           given id of staff.'''
-        self.cur.execute(
-            '''
-            SELECT
-                name,
-                speciality
-            FROM staff
-            WHERE id=?
-            ''', (id,)
-        )
-        return list(self.cur.fetchall()[0])
-
-    def what_speciality(self, name):
-        '''return list containing name and speciality
-           refering to given NAME.'''
-        self.cur.execute(
-            '''
-            SELECT
-                name,
-                speciality
-            FROM staff
-            WHERE name=?
-            ''', (name,)
-        )
-        return list(self.cur.fetchone())
-
     def convert_to_staff(self, id):
         '''convert id of staffmeeting into dict
         with important keys:
@@ -373,7 +353,7 @@ class DataBase():
         staff['date'] = staff_data[1]
         who_meets = [x for x in staff_data[2:-1] if x is not None]
 
-        staff['team'] = [self.who_is(x) for x in who_meets]
+        staff['team'] = [Staff.get(id=x).name for x in who_meets]
         return staff
 
     def convert_staff_to_id(self, staff_data_list):
@@ -382,12 +362,10 @@ class DataBase():
             [1, 2, None....]
         it has to return exactly 9 id's'''
         id_list = []
+
         for i in staff_data_list:
-            self.cur.execute('''
-                SELECT id FROM staff WHERE name=?
-                ''', (i[0],)
-            )
-            id_list.append(self.cur.fetchone()[0])
+            id_list.append(Staff.get(Staff.name == i[0]).id)
+
         for i in range(len(id_list), 9):
             id_list.append(None)
 
@@ -475,7 +453,7 @@ class DataBase():
         ]
 
         for i in staff:
-            staffmeeting_data['team'].append(self.who_is(i))
+            staffmeeting_data['team'].append(Staff.get(id=i).name)
         reason = staffmeeting_data['reason'].split(',')
         if len(reason[1]) < 2:
             reason[1] = ''

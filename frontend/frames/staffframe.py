@@ -2,6 +2,9 @@ from tkinter import Button, LabelFrame, Listbox
 from tkinter.ttk import Entry, Label, Treeview
 
 
+from backend.database import Staff
+
+
 class StaffFrame(LabelFrame):
 
     """Contains data of staffmeeteng"""
@@ -10,7 +13,7 @@ class StaffFrame(LabelFrame):
         super().__init__(window, **kwargs)
         self.base = base
         self.staff_id = None
-        self.all_staff = [x[0] for x in self.base.get_all_staff()]
+        self.all_staff = [i.name for i in Staff.select()]
         self.data_label = Label(self, text="Data zespołu")
         self.data_label.grid(row=0, column=0, padx=5, pady=1, sticky='e')
         self.data_entry = Entry(self, width=20)
@@ -56,9 +59,6 @@ class StaffFrame(LabelFrame):
         )
         self.delete_button.grid(row=3, column=1, padx=5, pady=5)
 
-    def get_all_staff(self):
-        return [x[0] for x in self.base.get_all_staff()]
-
     def get_staff_from_table(self):
         '''return list of member of staff_meeting from table
         eg. [[name, speciality],[name, speciality]]'''
@@ -94,9 +94,9 @@ class StaffFrame(LabelFrame):
     def tables_tidying(self):
         self.another_staff.delete(0, 'end')
         used_staff = [x[0] for x in self.get_staff_from_table()]
-        for member in self.get_all_staff():
-            if member not in used_staff:
-                self.another_staff.insert('end', member)
+        for member in Staff.select():
+            if member.name not in used_staff:
+                self.another_staff.insert('end', member.name)
 
     def add_member(self):
         if not self.another_staff.curselection():
@@ -104,9 +104,9 @@ class StaffFrame(LabelFrame):
         else:
             self.table.insert('', 'end', values=(
                 self.another_staff.selection_get(),
-                self.base.what_speciality(
-                    self.another_staff.selection_get()
-                )[1]
+                Staff.get(
+                    Staff.name == self.another_staff.selection_get()
+                ).speciality
             ))
 
             self.tables_tidying()
