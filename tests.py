@@ -14,8 +14,8 @@ class testTest(unittest.TestCase):
         self.assertEqual(
             self.instance.applicationframe['text'],
             "Wnioskodawcy"
-            )
+        )
         self.assertEqual(
             self.instance.staff_meeting_frame['text'],
             "Zespół orzekający"
-            )
+        )

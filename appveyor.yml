@@ -14,7 +14,7 @@ init:
 
 test_script:
   - cmd: pycodestyle . --exclude=backend/data_xml.py
-  - cmd: nosetests tests.py
+  - cmd: nosetests --config=nose.cfg tests.py
 
 build_script:
   - cmd: python setup.py build
