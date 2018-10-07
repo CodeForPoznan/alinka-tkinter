@@ -10,11 +10,11 @@ init:
   - cmd: set PATH=%PYTHON%;%PYTHON%\scripts;%PATH%
   - cmd: python --version
   - cmd: pip --version
-  - cmd: pip install cx_Freeze coverage nose pycodestyle python-docx 
+  - cmd: pip install cx_Freeze coverage pycodestyle pytest pytest-cov pytest-testdox python-docx 
 
 test_script:
   - cmd: pycodestyle . --exclude=backend/data_xml.py
-  - cmd: nosetests --config=nose.cfg tests.py
+  - cmd: py.test --cov
 
 build_script:
   - cmd: python setup.py build
