@@ -20,6 +20,17 @@ class Staff(Model):
     speciality = TextField()
 
 
+class School(Model):
+
+    class Meta:
+        database = DB
+
+    name = TextField()
+    sort = TextField()
+    address = TextField()
+    zipcode = TextField()
+
+
 class DataBase:
 
     def __init__(self):
@@ -50,7 +61,7 @@ class DataBase:
             )
 
             DB.connect()
-            DB.create_tables([Staff])
+            DB.create_tables([Staff, School])
 
             self.cur.execute(
                 '''CREATE TABLE IF NOT EXISTS staffmeeting (
@@ -77,15 +88,7 @@ class DataBase:
                 student INTEGER
                 )'''
             )
-            self.cur.execute(
-                '''CREATE TABLE IF NOT EXISTS school (
-                id INTEGER PRIMARY KEY,
-                name TEXT,
-                sort TEXT,
-                address TEXT,
-                zipcode TEXT
-                )'''
-            )
+
             self.add_fake_data()
             self.conection.commit()
 
@@ -93,9 +96,7 @@ class DataBase:
         for i in staff:
             Staff(**i).save()
         for i in places:
-            self.cur.execute(
-                '''INSERT INTO school VALUES(NULL, ?, ?, ?, ?)''', i
-            )
+            School(**i).save()
 
         self.conection.commit()
 
@@ -290,30 +291,6 @@ class DataBase:
         )
         self.conection.commit()
 
-    def select_school(self, sort):
-        self.cur.execute(
-            '''
-            SELECT name
-            FROM school
-            WHERE sort=?
-            ''', (sort,)
-        )
-        schools = []
-        for i in self.cur.fetchall():
-            schools.append(i[0])
-        return schools
-
-    def sort_of_school(self):
-        self.cur.execute(
-            '''
-            SELECT sort
-            FROM school'''
-        )
-        sort = []
-        for i in self.cur.fetchall():
-            sort.append(i[0])
-        return sorted(set(sort))
-
     def staff_meeting_list(self):
         '''get tuple with id, date, ids of stuff, student'''
         self.cur.execute('''SELECT * FROM staffmeeting''')
@@ -370,14 +347,6 @@ class DataBase:
             id_list.append(None)
 
         return id_list
-
-    def get_school(self, name):
-        self.cur.execute('''
-            SELECT * FROM school
-            WHERE name=?
-            ''', (name,)
-        )
-        return self.cur.fetchall()[0]
 
     def get_student_id(self, pesel):
         '''Get student id from student tab.'''

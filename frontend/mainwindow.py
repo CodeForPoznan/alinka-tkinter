@@ -13,7 +13,7 @@ from .values import (
     recommend_special_education
 )
 
-from backend.database import DataBase
+from backend.database import DataBase, School
 from backend.create import Decision
 from backend.create_decree import Decree
 from backend.create_protokol import Protokol
@@ -162,7 +162,7 @@ class MainWindow():
         self.window.destroy()
 
     def values(self):
-        school = self.base.get_school(self.actual_student.school.get())
+        school = School.get(School.name == self.actual_student.school.get())
         return {
             'name_n': self.actual_student.name_of_student_n_entry.get(),
             'name_g': self.actual_student.name_of_student_g_entry.get(),
@@ -188,10 +188,10 @@ class MainWindow():
             'staff_id': self.staff_meeting_frame.staff_id,
             'staff_meeting_date': self.staff_meeting_frame.data_entry.get(),
             'staff': self.staff_list(),
-            'school_name': school[1],
-            'school_sort': school[2],
-            'school_address': school[3],
-            'school_city': school[4],
+            'school_name': school.name,
+            'school_sort': school.sort,
+            'school_address': school.address,
+            'school_city': school.zipcode,
             'class': self.actual_student.class_entry.get(),
             'profession': self.actual_student.profession_entry.get(),
             'recommendations': self.get_form_data(
@@ -397,9 +397,13 @@ class MainWindow():
             'end',
             'Zielona 29b/5'
         )
-        self.actual_student.school['values'] = self.base.select_school(
-            self.base.sort_of_school()[1]
-        )
+        self.actual_student.school['values'] = [
+            i.name for i in School.select().where(
+                School.sort == sorted(
+                    i.sort for i in School.select().distinct()
+                )[1]
+            )
+        ]
         self.actual_student.school.current(0)
         self.applicationframe.name_of_applicant_n.insert(
             'end',
