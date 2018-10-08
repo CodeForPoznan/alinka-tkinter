@@ -85,13 +85,16 @@ class StaffFrame(LabelFrame):
         self.tables_tidying()
 
     def on_listbox_select(self, event):
-        if not isinstance(self.table.selection(), str):
+        '''Remove selection from table after clicking listbox.'''
+        if self.table.selection():
             self.table.selection_remove(self.table.selection()[0])
 
     def on_treeview_selected(self, event):
+        '''Remove selection from lisbox after clicking table'''
         self.another_staff.select_clear(0, 'end')
 
     def tables_tidying(self):
+        '''Remove unused staff from table.'''
         self.another_staff.delete(0, 'end')
         used_staff = [x[0] for x in self.get_staff_from_table()]
         for member in self.get_all_staff():
@@ -99,6 +102,7 @@ class StaffFrame(LabelFrame):
                 self.another_staff.insert('end', member)
 
     def add_member(self):
+        '''Add member from listbox to table.'''
         if not self.another_staff.curselection():
             pass
         else:
@@ -112,6 +116,7 @@ class StaffFrame(LabelFrame):
             self.tables_tidying()
 
     def remove_member(self):
+        '''Removes member from table to listbox.'''
         selected_item = self.table.selection()
         if selected_item:
             self.table.delete(selected_item)
