@@ -1,3 +1,5 @@
+import os
+
 from tkinter import Button, font, Frame, PhotoImage
 
 
@@ -12,10 +14,11 @@ class ButtonFrame(Frame):
         self.base = base
         self.font = font.Font(size=16)
 
-        wheel = PhotoImage(file="./frontend/frames/wheel.png")
-        eraser = PhotoImage(file="./frontend/frames/eraser.png")
-        floppy = PhotoImage(file="./frontend/frames/floppy.png")
-        exit = PhotoImage(file="./frontend/frames/exit.png")
+        module_directory = os.path.dirname(os.path.abspath(__file__))
+        wheel = PhotoImage(file=os.path.join(module_directory, "wheel.png"))
+        eraser = PhotoImage(file=os.path.join(module_directory, "eraser.png"))
+        floppy = PhotoImage(file=os.path.join(module_directory, "floppy.png"))
+        exit = PhotoImage(file=os.path.join(module_directory, "exit.png"))
 
         self.settings_button = Button(self, image=wheel)
         self.settings_button.image = wheel

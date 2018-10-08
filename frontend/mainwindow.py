@@ -1,4 +1,4 @@
-from tkinter import Button
+from tkinter import Toplevel
 
 from .values import (
     footnotes_development_support,
@@ -20,6 +20,7 @@ from backend.create_protokol import Protokol
 from frontend.frames.actualdata import StudentData
 from frontend.frames.buttons import ButtonFrame
 from frontend.frames.application import Application
+from frontend.frames.settings import SettingsWindow
 from frontend.frames.staffframe import StaffFrame
 from frontend.frames.studentdata import ListOfData
 
@@ -27,9 +28,7 @@ from frontend.frames.studentdata import ListOfData
 class MainWindow():
 
     def __init__(self, window):
-        self.base = DataBase('database.db')
-        if not self.base.empty_database():
-            self.base.add_fake_data()
+        self.base = DataBase()
         self.window = window
         self.notebook = ListOfData(self.window, self.base, text="Baza danych")
         self.notebook.grid(row=0, column=0, rowspan=8, sticky='n', padx=5)
@@ -163,74 +162,45 @@ class MainWindow():
         self.window.destroy()
 
     def values(self):
-        return dict(zip([
-            "name_n",
-            "name_g",
-            "zip_code",
-            "city",
-            "address",
-            "pesel",
-            "birth_date",
-            "birth_place",
-            "casebook",
-            "subject",
-            "reason",
-            "applicant_n",
-            "applicant_g",
-            "applicant_zipcode",
-            "applicant_city",
-            "applicant_address",
-            "timespan",
-            "timespan_ind",
-            "staff_id",
-            "staff_meeting_date",
-            "staff",
-            "school_name",
-            "school_sort",
-            "school_address",
-            "school_city",
-            "class",
-            "profession",
-            "recommendations",
-            "footnotes"
-        ], [
-            self.actual_student.name_of_student_n_entry.get(),
-            self.actual_student.name_of_student_g_entry.get(),
-            self.actual_student.zip_code_of_student_entry.get(),
-            self.actual_student.city_of_student_entry.get(),
-            self.actual_student.address_of_student_entry.get(),
-            self.actual_student.pesel_entry.get(),
-            self.actual_student.birth_date,
-            self.actual_student.birth_place_entry.get(),
-            self.actual_student.id_of_student_entry.get(),
-            self.applicationframe.application_subject.get(),
-            self.get_disability(
+        school = self.base.get_school(self.actual_student.school.get())
+        return {
+            'name_n': self.actual_student.name_of_student_n_entry.get(),
+            'name_g': self.actual_student.name_of_student_g_entry.get(),
+            'zip_code': self.actual_student.zip_code_of_student_entry.get(),
+            'city': self.actual_student.city_of_student_entry.get(),
+            'address': self.actual_student.address_of_student_entry.get(),
+            'pesel': self.actual_student.pesel_entry.get(),
+            'birth_date': self.actual_student.birth_date,
+            'birth_place': self.actual_student.birth_place_entry.get(),
+            'casebook': self.actual_student.id_of_student_entry.get(),
+            'subject': self.applicationframe.application_subject.get(),
+            'reason': self.get_disability(
                 self.applicationframe.application_reason.get(),
                 self.applicationframe.application_reason2.get()
             ),
-            self.applicationframe.name_of_applicant_n.get(),
-            self.applicationframe.name_of_applicant_g.get(),
-            self.applicationframe.zip_code.get(),
-            self.applicationframe.city.get(),
-            self.applicationframe.address.get(),
-            self.applicationframe.timespan.get(),
-            self.applicationframe.timespan_ind.get(),
-            self.staff_meeting_frame.staff_id,
-            self.staff_meeting_frame.data_entry.get(),
-            self.staff_list(),
-            self.base.get_school(self.actual_student.school.get())[1],
-            self.base.get_school(self.actual_student.school.get())[2],
-            self.base.get_school(self.actual_student.school.get())[3],
-            self.base.get_school(self.actual_student.school.get())[4],
-            self.actual_student.class_entry.get(),
-            self.actual_student.profession_entry.get(),
-            self.get_form_data(
+            'applicant_n': self.applicationframe.name_of_applicant_n.get(),
+            'applicant_g': self.applicationframe.name_of_applicant_g.get(),
+            'applicant_zipcode': self.applicationframe.zip_code.get(),
+            'applicant_city': self.applicationframe.city.get(),
+            'applicant_address': self.applicationframe.address.get(),
+            'timespan': self.applicationframe.timespan.get(),
+            'timespan_ind': self.applicationframe.timespan_ind.get(),
+            'staff_id': self.staff_meeting_frame.staff_id,
+            'staff_meeting_date': self.staff_meeting_frame.data_entry.get(),
+            'staff': self.staff_list(),
+            'school_name': school[1],
+            'school_sort': school[2],
+            'school_address': school[3],
+            'school_city': school[4],
+            'class': self.actual_student.class_entry.get(),
+            'profession': self.actual_student.profession_entry.get(),
+            'recommendations': self.get_form_data(
                 self.applicationframe.application_subject.get()
             )[0],
-            self.get_form_data(
+            'footnotes': self.get_form_data(
                 self.applicationframe.application_subject.get()
             )[1]
-        ]))
+        }
 
     def select_meeting(self, event):
         '''insert selected staffmeeting into form'''
@@ -406,7 +376,9 @@ class MainWindow():
 
     def settings(self, event):
         '''Toplevel window for setup'''
-        pass
+        new_window = Toplevel()
+        new_window.title("Ustawienia")
+        self.settings_window = SettingsWindow(new_window, self.base)
 
     def fake_data(self):
         self.actual_student.name_of_student_n_entry.insert(
