@@ -1,6 +1,7 @@
 __pycache__/
 *.pyc
 env/
+.coverage
 .vscode/
 orzeczenia/
 database.db
