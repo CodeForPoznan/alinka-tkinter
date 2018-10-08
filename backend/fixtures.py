@@ -1,11 +1,20 @@
 staff = [
-    ["mgr Helena Ogórek", "psycholog"],
-    ["mgr Antoni Stąsz-Lebieź", "surdopedagog, logopeda"],
-    ["mgr Iwona Karaś", "pedagog"],
-    ["mgr Leonia Witek-Konuś", "psycholog, tyflopedagog"],
-    ["mgr Eleonora Roseveelt", "socjoterapeuta, tyflopedagog"],
-    ["dr Sergiusz Rahmaninov", "tyflopedagog, neurosocjopsycholog"],
-    ["lek. Agnieszka Lamba", "lekarz pediatra"]
+    {'name': 'mgr Helena Ogórek', 'speciality': 'psycholog'},
+    {'name': 'Antoni Stąsz-Lebieź', 'speciality': 'surdopedagog, logopeda'},
+    {'name': 'mgr Iwona Karaś', 'speciality': 'pedagog'},
+    {
+        'name': 'mgr Leonia Witek-Konuś',
+        'speciality': 'psycholog, tyflopedagog'
+    },
+    {
+        'name': 'mgr Eleonora Roseveelt',
+        'speciality': 'socjoterapeuta, tyflopedagog'
+    },
+    {
+        'name': 'dr Sergiusz Rahmaninov',
+        'speciality': 'tyflopedagog, neurosocjopsycholog'
+    },
+    {'name': 'lek. Agnieszka Lamba', 'speciality': 'lekarz pediatra'}
 ]
 
 staffmeeting = ["23.04.2018", 3, 1, 2, 4, 5, 6]

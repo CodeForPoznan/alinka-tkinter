@@ -10,7 +10,7 @@ init:
   - cmd: set PATH=%PYTHON%;%PYTHON%\scripts;%PATH%
   - cmd: python --version
   - cmd: pip --version
-  - cmd: pip install cx_Freeze nose pycodestyle python-docx 
+  - cmd: pip install cx_Freeze nose pycodestyle python-docx peewee 
 
 test_script:
   - cmd: pycodestyle . --exclude=backend/data_xml.py
