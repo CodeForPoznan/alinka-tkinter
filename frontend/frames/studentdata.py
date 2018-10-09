@@ -1,5 +1,7 @@
 from tkinter.ttk import Button, Frame, Labelframe, Notebook, Treeview
 
+from backend.database import StaffMeeting
+
 
 class ListOfData(Labelframe):
 
@@ -84,27 +86,31 @@ class ListOfData(Labelframe):
 
     def fill_staffmeeting_list(self):
         self.table.delete(*self.table.get_children())
-        staff_meeting = self.base.staff_meeting_list()
+        staff_meeting = StaffMeeting.select()
         meeting_in_table = {}  # {value: iid}
         for i in staff_meeting:
-            if i[1] not in meeting_in_table.keys():
-                meeting_in_table[i[1]] = self.table.insert(
+            if i.date not in meeting_in_table.keys():
+                meeting_in_table[i.date] = self.table.insert(
                     "",
                     'end',
-                    values=(i[1],)
+                    values=(i.date,)
                 )
                 actual_iid = self.table.insert(
-                    meeting_in_table[i[1]],
+                    meeting_in_table[i.date],
                     'end',
-                    values=(self.base.get_student_name(i[20]),)
+                    values=(self.base.get_student_name(i.student),)
                 )
-                self.table.set(actual_iid, column="id", value=i[0])
-                self.table.set(actual_iid, column="student_id", value=i[20])
+                self.table.set(actual_iid, column="id", value=i.id)
+                self.table.set(
+                    actual_iid,
+                    column="student_id",
+                    value=i.student
+                )
             else:
                 actual_iid = self.table.insert(
-                    meeting_in_table[i[1]],
+                    meeting_in_table[i.date],
                     'end',
-                    values=(self.base.get_student_name(i[20]),)
+                    values=(self.base.get_student_name(i.student),)
                 )
                 self.table.set(actual_iid, column="id", value=i[0])
                 self.table.set(actual_iid, column="student_id", value=i[20])
@@ -115,5 +121,5 @@ class ListOfData(Labelframe):
     def delete_from_staffmeeting(self):
         selected_item = self.table.selection()
         staffmeeting_id = self.table.item(selected_item)['values'][1]
-        self.base.delete_from_staffmeeting(staffmeeting_id)
+        StaffMeeting.get(StaffMeeting.id == staffmeeting_id).delete_instance()
         self.fill_staffmeeting_list()
