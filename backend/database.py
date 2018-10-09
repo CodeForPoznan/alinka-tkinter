@@ -31,6 +31,28 @@ class School(Model):
     zipcode = TextField()
 
 
+class Student(Model):
+
+    class Meta:
+        database = DB
+
+    name_n = TextField()
+    name_g = TextField()
+    zip_code = TextField()
+    city = TextField()
+    address = TextField()
+    pesel = TextField(unique=True)
+    birth_date = TextField()
+    birth_place = TextField()
+    casebook = TextField()
+    school_name = TextField()
+    school_sort = TextField()
+    school_address = TextField()
+    school_city = TextField()
+    class_ = TextField(column_name='class')
+    profession = TextField()
+
+
 class DataBase:
 
     def __init__(self):
@@ -39,29 +61,8 @@ class DataBase:
         self.cur = self.conection.cursor()
 
         if self.empty_database:
-            self.cur.execute(
-                '''CREATE TABLE IF NOT EXISTS student (
-                id INTEGER PRIMARY KEY,
-                name_n TEXT,
-                name_g TEXT,
-                zip_code TEXT,
-                city TEXT,
-                address TEXT,
-                pesel TEXT UNIQUE,
-                birth_date TEXT,
-                birth_place TEXT,
-                casebook TEXT,
-                school_name TEXT,
-                school_sort TEXT,
-                school_address TEXT,
-                school_city TEXT,
-                class TEXT,
-                profession TEXT
-                )'''
-            )
-
             DB.connect()
-            DB.create_tables([Staff, School])
+            DB.create_tables([School, Staff, Student])
 
             self.cur.execute(
                 '''CREATE TABLE IF NOT EXISTS staffmeeting (
@@ -101,119 +102,84 @@ class DataBase:
         self.conection.commit()
 
     def add_student_to_db(self, values):
-        value = [
-            values['name_n'],
-            values['name_g'],
-            values['zip_code'],
-            values['city'],
-            values['address'],
-            values['pesel'],
-            values['birth_date'],
-            values['birth_place'],
-            values['casebook'],
-            values['school_name'],
-            values['school_sort'],
-            values['school_address'],
-            values['school_city'],
-            values['class'],
-            values['profession']
-        ]
-
-        self.cur.execute(
-            '''
-            INSERT INTO student
-            VALUES(
-                NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
-                )''', value
-        )
-
-        self.conection.commit()
+        Student(
+            name_n=values['name_n'],
+            name_g=values['name_g'],
+            zip_code=values['zip_code'],
+            city=values['city'],
+            address=values['address'],
+            pesel=values['pesel'],
+            birth_date=values['birth_date'],
+            birth_place=values['birth_place'],
+            casebook=values['casebook'],
+            school_name=values['school_name'],
+            school_sort=values['school_sort'],
+            school_address=values['school_address'],
+            school_city=values['school_city'],
+            class_=values['class'],
+            profession=values['profession']
+        ).save()
 
     def get_student_data(self, pesel="", id=""):
         '''return dict of student data.'''
-        student = {}
         if pesel:
-            self.cur.execute(
-                '''SELECT * FROM student WHERE pesel=?''', (pesel,)
-            )
+            student = Student.get(Student.pesel == pesel)
         else:
-            self.cur.execute(
-                '''SELECT * FROM student WHERE id=?''', (id,)
-            )
-        student_data = self.cur.fetchall()[0]
-        student = dict(zip([
-            'id', 'name_n', 'name_g', 'zip_code', 'city', 'address', 'pesel',
-            'birth_date', 'birth_place', 'casebook', 'school_name',
-            'school_sort', 'school_address', 'school_city', 'class',
-            'profession'
-        ], student_data))
+            student = Student.get(Student.id == id)
 
-        return student
+        return {
+            'id': student.id,
+            'name_n': student.name_n,
+            'name_g': student.name_g,
+            'zip_code': student.zip_code,
+            'city': student.city,
+            'address': student.address,
+            'pesel': student.pesel,
+            'birth_date': student.birth_date,
+            'birth_place': student.birth_place,
+            'casebook': student.casebook,
+            'school_name': student.school_name,
+            'school_sort': student.school_sort,
+            'school_address': student.school_address,
+            'school_city': student.school_city,
+            'class': student.class_,
+            'profession': student.profession,
+        }
 
     def update_student(self, values):
-        value = [
-            values['name_n'],
-            values['name_g'],
-            values['zip_code'],
-            values['city'],
-            values['address'],
-            values['pesel'],
-            values['birth_date'],
-            values['birth_place'],
-            values['casebook'],
-            values['school_name'],
-            values['school_sort'],
-            values['school_address'],
-            values['school_city'],
-            values['class'],
-            values['profession'],
-            values['pesel']
-        ]
-        self.cur.execute(
-            '''
-            UPDATE student
-            SET
-                name_n=?,
-                name_g=?,
-                zip_code=?,
-                city=?,
-                address=?,
-                pesel=?,
-                birth_date=?,
-                birth_place=?,
-                casebook=?,
-                school_name=?,
-                school_sort=?,
-                school_address=?,
-                school_city=?,
-                class=?,
-                profession=?
-            WHERE pesel=?
-            ''', (value)
-        )
-        self.conection.commit()
+        student = Student.get(Student.pesel == values['pesel'])
+        student.name_n = values['name_n']
+        student.name_g = values['name_g']
+        student.zip_code = values['zip_code']
+        student.city = values['city']
+        student.address = values['address']
+        student.birth_date = values['birth_date']
+        student.birth_place = values['birth_place']
+        student.casebook = values['casebook']
+        student.school_name = values['school_name']
+        student.school_sort = values['school_sort']
+        student.school_address = values['school_address']
+        student.school_city = values['school_city']
+        student.class_ = values['class']
+        student.profession = values['profession']
+        student.save()
 
     def delete_student(self, pesel):
-        student_id = self.get_student_id(pesel)
-        self.cur.execute(
-            '''
-            DELETE FROM student
-            WHERE pesel=?
-            ''', (pesel,)
-        )
+        student = Student.get(Student.pesel == pesel)
         self.cur.execute(
             '''
             DELETE FROM staffmeeting
             WHERE student=?
-            ''', (student_id,)
+            ''', (student.id,)
         )
         self.conection.commit()
+        student.delete_instance()
 
     def add_staffmeeting(self, values):
         '''
         Add new staffmeeting to database
         '''
-        student_id = self.get_student_id(values['pesel'])
+        student_id = Student.get(Student.pesel == values['pesel']).id
         staff = [
             values['staff_meeting_date']
         ] + self.convert_staff_to_id(values['staff']['team'])
@@ -239,7 +205,7 @@ class DataBase:
         self.conection.commit()
 
     def update_staffmeeting(self, values):
-        student_id = self.get_student_id(values['pesel'])
+        student_id = Student.get(Student.pesel == values['pesel']).id
         staff = self.convert_staff_to_id(values['staff']['team'])
         for i in [
             values['applicant_n'],
@@ -348,34 +314,13 @@ class DataBase:
 
         return id_list
 
-    def get_student_id(self, pesel):
-        '''Get student id from student tab.'''
-        self.cur.execute(
-            '''
-            SELECT id
-            FROM student
-            WHERE pesel=?
-            ''', (pesel,)
-        )
-        return self.cur.fetchone()[0]
-
     def get_student_name(self, id):
         '''Return name of the student by his/her id'''
-        self.cur.execute(
-            '''
-            SELECT name_n
-            FROM student
-            WHERE id=?
-            ''', (id,)
-        )
-        student = self.cur.fetchone()[0]
-        student_name = []
+        student = Student.get(id=id).name_n
         splitted_name = student.split(" ")
-        first_name = splitted_name[:-1]
+        first_names = splitted_name[:-1]
         last_name = splitted_name[-1]
-        student_name.append(last_name)
-        student_name += first_name
-        return " ".join(student_name)
+        return " ".join([last_name] + first_names)
 
     def get_staffmeeting_data(self, staffmeeting_id):
         '''
@@ -434,33 +379,17 @@ class DataBase:
         '''return dict of student containing
         {pesel: name}'''
         students = {}
-        self.cur.execute(
-            '''SELECT pesel, name_n FROM student'''
-        )
-        student_list = self.cur.fetchall()
-        if student_list:
-            for i in student_list:
-                student_name = []
-                splitted_name = i[1].split(" ")
-                first_name = splitted_name[:-1]
-                last_name = splitted_name[-1]
-                student_name.append(last_name)
-                student_name += first_name
-                students[i[0]] = " ".join(student_name)
+        student_list = Student.select()
+
+        for i in student_list:
+            splitted_name = i.name_n.split(" ")
+            first_names = splitted_name[:-1]
+            last_name = splitted_name[-1]
+            students[i.pesel] = " ".join([last_name] + first_names)
         return OrderedDict(sorted(students.items(), key=lambda t: t[1]))
 
-    def pesel_exists(self, pesel):
-        self.cur.execute(
-            '''
-            SELECT 1
-            FROM student
-            WHERE pesel=?
-            ''', (pesel,)
-        )
-        return self.cur.fetchone()
-
     def staffmeeting_exists(self, values):
-        student_id = self.get_student_id(values['pesel'])
+        student_id = Student.get(Student.pesel == values['pesel']).id
         subject = values['subject']
         date = values['staff_meeting_date']
         self.cur.execute(

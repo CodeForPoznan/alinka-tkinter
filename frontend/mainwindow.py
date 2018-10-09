@@ -13,7 +13,7 @@ from .values import (
     recommend_special_education
 )
 
-from backend.database import DataBase, School
+from backend.database import DataBase, School, Student
 from backend.create import Decision
 from backend.create_decree import Decree
 from backend.create_protokol import Protokol
@@ -114,7 +114,9 @@ class MainWindow():
         values = self.values()
 
         # Update/Create student
-        if not self.base.pesel_exists(values['pesel']):
+        try:
+            Student.get(Student.pesel == values['pesel'])
+        except Student.DoesNotExist:
             self.base.add_student_to_db(self.values())
         else:
             self.base.update_student(self.values())
