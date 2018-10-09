@@ -2,6 +2,8 @@ import re
 from tkinter import Entry, Label, StringVar
 from tkinter.ttk import Labelframe, Combobox
 
+from backend.database import School
+
 
 class StudentData(Labelframe):
 
@@ -182,11 +184,16 @@ class StudentData(Labelframe):
 
     def list_of_schools(self):
         sort = self.sort_of_school_box.get()
-        self.school['values'] = self.base.select_school(sort)
+        self.school['values'] = [
+            i.name
+            for i in School.select().where(School.sort == sort)
+        ]
         self.school.select_clear()
 
     def list_of_sorts(self):
-        self.sort_of_school_box['values'] = self.base.sort_of_school()
+        self.sort_of_school_box['values'] = sorted(
+            i.sort for i in School.select().distinct()
+        )
 
     def clear_all_selection(self, event):
         self.school.select_clear()
@@ -195,11 +202,11 @@ class StudentData(Labelframe):
     def pesel_validation(self):
         # validation of number of digit
         pesel = str(self.pesel_string.get())
-        if not (re.match('^[0-9]{11}$', pesel)):
+        if not (re.match('^[0-9]{4}[0-3]{1}[0-9]{6}$', pesel)):
             self.pesel_entry.config(background="red")
             return 1
 
-        # validation of control digit
+        # validation of control digit and correct birth date
         cyfra_kontrolna = int(pesel[10])
         multiplier = [9, 7, 3, 1, 9, 7, 3, 1, 9, 7]
         suma = 0
@@ -208,6 +215,9 @@ class StudentData(Labelframe):
         if suma % 10 == cyfra_kontrolna:
             self.pesel_entry.config(background="green")
             self.birth_date = self.birth_data_from_pesel(pesel)
+            if self.birth_date == "wrong PESEL":
+                self.pesel_entry.config(background="red")
+                return 1
             return 0
         else:
             self.pesel_entry.config(background="red")
@@ -215,14 +225,28 @@ class StudentData(Labelframe):
             return 1
 
     def birth_data_from_pesel(self, pesel):
-        year = ""
-        if pesel[0] in ["0", "1"]:
-            year = "20" + pesel[0:2]
-            month = str(int(pesel[2:4]) - 20)
-        elif pesel[0] in ["7", "8", "9"]:
+        if pesel[2] in ["0", "1"]:
             year = "19" + pesel[0:2]
             month = pesel[2:4]
+        elif pesel[2] in ["2", "3"]:
+            year = "20" + pesel[0:2]
+            month = str(int(pesel[2:4]) - 20)
+        elif pesel[2] in ["4", "5"]:
+            year = "21" + pesel[0:2]
+            month = str(int(pesel[2:4]) - 40)
+        elif pesel[2] in ["6", "7"]:
+            year = "22" + pesel[0:2]
+            month = str(int(pesel[2:4]) - 60)
+        elif pesel[2] in ["8", "9"]:
+            year = "18" + pesel[0:2]
+            month = str(int(pesel[2:4]) - 80)
+        else:
+            return "wrong PESEL"
         day = pesel[4:6]
+        if 0 >= int(month) >= 13 or 0 >= int(day) >= 31:
+            return "wrong PESEL"
+        if len(month) == 1:
+            month = "0"+month
         return ".".join([day, month, year])
 
     def insert_actual_data(self, student):

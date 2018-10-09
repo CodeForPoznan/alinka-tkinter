@@ -20,269 +20,269 @@ staff = [
 staffmeeting = ["23.04.2018", 3, 1, 2, 4, 5, 6]
 
 places = [
-    [
-        'Szkoła Podstawowa nr 1 w Grodzisku Wlkp.',
-        'szkoła podstawowa',
-        'ul. Chopina 26',
-        '62-065 Grodzisk Wlkp.'
-    ],
-    [
-        'Szkoła Podstawowa nr 2 z Oddziałami Gimnazjalnymi',
-        'szkoła podstawowa',
-        'ul. 3 – ego Maja 5',
-        '62-065 Grodzisk Wlkp.'
-    ],
-    [
-        'Szkoła Podstawowa nr 4 w Grodzisku Wlkp.',
-        'szkoła podstawowa',
-        'ul. Środkowa 56',
-        '62-065 Grodzisk Wlkp.'
-    ],
-    [
-        'Szkoła Podstawowa w Rakoniewicach',
-        'szkoła podstawowa',
-        'ul. Nowotomyska 1',
-        '62-067 Rakoniewice'
-    ],
-    [
-        'Zespół Przedszkolno – Szkolny w Rostarzewie',
-        'szkoła podstawowa',
-        'ul. Rakoniewicka 23',
-        '62-068 Rostarzewo'
-    ],
-    [
-        'Zespół Szkolno Przedszkolny w Jabłonnie',
-        'szkoła podstawowa',
-        'ul. Nowotomyska 9',
-        '64-308 Jabłonna'
-    ],
-    [
-        'Zespół Przedszkolno-Szkolny w Ruchocicach',
-        'szkoła podstawowa',
-        'ul. Poznańska 23',
-        '62-073 Ruchocice'
-    ],
-    [
-        'Zespół Szkolno – Przedszkolny w Granowie',
-        'szkoła podstawowa',
-        'ul. Konstytucji 3 Maja 1a',
-        '62-066 Granowo'
-    ],
-    [
-        'Zespół Przedszkolno – Szkolny w Łąkiem',
-        'szkoła podstawowa',
-        'Łąkie 81',
-        '62-068 Rostarzewo'
-    ],
-    [
-        'Szkoła Podstawowa w Kamieńcu',
-        'szkoła podstawowa',
-        'ul. Stawowa 28',
-        '64-061 Kamieniec'
-    ],
-    [
-        'Szkoła Podstawowa w Bielawach',
-        'szkoła podstawowa',
-        'Bielawy 3',
-        '62-066 Granowo'
-    ],
-    [
-        'Szkoła Podstawowa w Konojadzie',
-        'szkoła podstawowa',
-        'Konojad, ul. Szkolna  15',
-        '64-060 Wolkowo'
-    ],
-    [
-        'Szkoła Podstawowa w Parzęczewie',
-        'szkoła podstawowa',
-        'Parzęczewo 25',
-        '64-061 Kamieniec'
-    ],
-    [
-        'Szkoła Podstawowa w Grąblewie',
-        'szkoła podstawowa',
-        'Grąblewo 22',
-        '62-065 Grodzisk Wlkp.'
-    ],
-    [
-        'Szkoła Podstawowa w Kąkolewie',
-        'szkoła podstawowa',
-        'Kąkolewo 64',
-        '62-065 Grodzisk Wlkp.'
-    ],
-    [
-        'Szkoła Podstawowa w Słocinie',
-        'szkoła podstawowa',
-        'Słocin 106',
-        '62-065 Grodzisk Wlkp.'
-    ],
-    [
-        'Zespół Szkół w Ptaszkowie',
-        'szkoła podstawowa',
-        'Ptaszkowo 31 A',
-        '62-065 Grodzisk Wlkp.'
-    ],
-    [
-        'Szkoła Podstawowa w Wilkowie Polskim',
-        'szkoła podstawowa',
-        'Wilkowo Polskie, ul. Kościańska 2',
-        '64-050 Wielichowo'
-    ],
-    [
-        'Szkoła Podstawowa w Wilkowie Polskim – filia w Śniatach',
-        'szkoła podstawowa',
-        'Śniaty ul. Szkolna 3',
-        '64-050 Wielichowo'
-    ],
-    [
-        'Szkoła Podstawowa w Gradowicach',
-        'szkoła podstawowa',
-        'Gradowice, ul. Szkolna 20',
-        '64-050 Wielichowo'
-    ],
-    [
-        'Szkoła Podstawowa w Łubnicy',
-        'szkoła podstawowa',
-        'Łubnica ul. Szkolna 4',
-        '64-050 Wielichowo'
-    ],
-    [
-        'Zespół Szkół w Wielichowie',
-        'szkoła podstawowa',
-        'ul. Kościelna 7a',
-        '64-050 Wielichowo'
-    ],
-    [
-        'Niepubliczna Szkoła Podstawowa w Grodzisku Wielkopolskim',
-        'szkoła podstawowa',
-        'ul. Żwirowa 15a',
-        '62-065 Grodzisk Wlkp.'
-    ],
-    [
-        'Przedszkole Gminne w Grodzisku Wlkp.',
-        'przedszkole',
-        'ul. Chopina 24',
-        '62-065 Grodzisk Wlkp.'
-    ],
-    [
-        'Publiczne Przedszkole "Chatka Puchatka" w Grodzisku Wlkp.',
-        'przedszkole',
-        'ul. Winna 12',
-        '62-065 Grodzisk Wlkp.'
-    ],
-    [
-        'Zespół Przedszkolno – Szkolny w Rostarzewie',
-        'przedszkole',
-        'ul. Rakoniewicka 23',
-        '62-068 Rostarzewo'
-    ],
-    [
-        'Przedszkole w Rakoniewicach',
-        'przedszkole',
-        'ul. Garbary 8',
-        '62-067 Rakoniewice'
-    ],
-    [
-        'Zespół Szkolno – Przedszkolny w Jabłonnie',
-        'przedszkole',
-        'ul. Nowotomyska 9',
-        '64-308 Jabłonna'
-    ],
-    [
-        'Zespół Przedszkolno-Szkolny w Ruchocicach',
-        'przedszkole',
-        'ul. Poznańska 23',
-        '62-073 Ruchocice'
-    ],
-    [
-        'Zespół Szkolno – Przedszkolny w Granowie',
-        'przedszkole',
-        'ul. Konstytucji 3 Maja 1a',
-        '62-066 Granowo'
-    ],
-    [
-        'Zespół Przedszkolno – Szkolny w Łąkiem',
-        'przedszkole',
-        'Łąkie 81',
-        '62-068 Rostarzewo'
-    ],
-    [
-        'Przedszkole Gminne w Kamieńcu',
-        'przedszkole',
-        'ul. Szkolna 2',
-        '64-061 Kamieniec'
-    ],
-    [
-        'Przedszkole w Wilkowie Polskim',
-        'przedszkole',
-        'Wilkowo Polskie, ul. Główna 1',
-        '64-050 Wielichowo'
-    ],
-    [
-        'Przedszkole w Śniatach',
-        'przedszkole',
-        'Śniaty, ul. Ratajczaka 8',
-        '64-050 Wielichowo'
-    ],
-    [
-        'Przedszkole w Łubnicy',
-        'przedszkole',
-        'Łubnica, ul. Dożynkowa 4',
-        '64-050 Wielichowo'
-    ],
-    [
-        'Przedszkole w Wielichowie',
-        'przedszkole',
-        'Wielichowo, ul. Kościelna 2',
-        '64-050 Wielichowo'
-    ],
-    [
-        'Przedszkole "Świat Bajek" w Wielichowie',
-        'przedszkole',
-        'Wielichowo, ul. Łąkowa 66',
-        '64-050 Wielichowo'
-    ],
-    [
-        '"Bobo- Wiercipięta" Prywatne przedszkole i żłobek',
-        'przedszkole',
-        'ul. Winna 30',
-        '62-065 Grodzisk Wlkp.'
-    ],
-    [
-        'Prywatne Przedszkole "Wiercipięta"',
-        'przedszkole',
-        'os. Wojska Polskiego 110',
-        '62-065 Grodzisk Wlkp.'
-    ],
-    [
-        'Zespół Szkół Ponadgimnazjalnych w Grodzisku Wlkp.',
-        'zasadnicza szkoła zawodowa',
-        'ul. Żwirki i Wigury 2',
-        '62-065 Grodzisk Wlkp.'
-    ],
-    [
-        'Zespół Szkół Ponadgimnazjalnych w Grodzisku Wlkp.',
-        'technikum',
-        'ul. Żwirki i Wigury 2',
-        '62-065 Grodzisk Wlkp.'
-    ],
-    [
-        'Liceum Ogólnokształcące w Grodzisku Wlkp.',
-        'liceum ogólnokształcące',
-        'ul. 3 Maja 7',
-        '62-065 Grodzisk Wlkp'
-    ],
-    [
-        'Ośrodek Rehabilitacyjno - Edukacyjno Wychowawczy',
-        'inne',
-        'Sielinko, ul. Opalenicka 4',
-        '64-330 Opalenica'
-    ],
-    [
-        'Specjalny Ośrodek Szkolno - Wychowawczy w Rydzynie',
-        'zasadnicza szkoła zawodowa',
-        'Plac Zamkowy 2',
-        '64-130 Rydzyna'
-    ],
-    ['-', 'inne', '-', '-']
+    {
+        'name': 'Szkoła Podstawowa nr 1 w Grodzisku Wlkp.',
+        'sort': 'szkoła podstawowa',
+        'address': 'ul. Chopina 26',
+        'zipcode': '62-065 Grodzisk Wlkp.'
+    },
+    {
+        'name': 'Szkoła Podstawowa nr 2 z Oddziałami Gimnazjalnymi',
+        'sort': 'szkoła podstawowa',
+        'address': 'ul. 3 – ego Maja 5',
+        'zipcode': '62-065 Grodzisk Wlkp.'
+    },
+    {
+        'name': 'Szkoła Podstawowa nr 4 w Grodzisku Wlkp.',
+        'sort': 'szkoła podstawowa',
+        'address': 'ul. Środkowa 56',
+        'zipcode': '62-065 Grodzisk Wlkp.'
+    },
+    {
+        'name': 'Szkoła Podstawowa w Rakoniewicach',
+        'sort': 'szkoła podstawowa',
+        'address': 'ul. Nowotomyska 1',
+        'zipcode': '62-067 Rakoniewice'
+    },
+    {
+        'name': 'Zespół Przedszkolno – Szkolny w Rostarzewie',
+        'sort': 'szkoła podstawowa',
+        'address': 'ul. Rakoniewicka 23',
+        'zipcode': '62-068 Rostarzewo'
+    },
+    {
+        'name': 'Zespół Szkolno Przedszkolny w Jabłonnie',
+        'sort': 'szkoła podstawowa',
+        'address': 'ul. Nowotomyska 9',
+        'zipcode': '64-308 Jabłonna'
+    },
+    {
+        'name': 'Zespół Przedszkolno-Szkolny w Ruchocicach',
+        'sort': 'szkoła podstawowa',
+        'address': 'ul. Poznańska 23',
+        'zipcode': '62-073 Ruchocice'
+    },
+    {
+        'name': 'Zespół Szkolno – Przedszkolny w Granowie',
+        'sort': 'szkoła podstawowa',
+        'address': 'ul. Konstytucji 3 Maja 1a',
+        'zipcode': '62-066 Granowo'
+    },
+    {
+        'name': 'Zespół Przedszkolno – Szkolny w Łąkiem',
+        'sort': 'szkoła podstawowa',
+        'address': 'Łąkie 81',
+        'zipcode': '62-068 Rostarzewo'
+    },
+    {
+        'name': 'Szkoła Podstawowa w Kamieńcu',
+        'sort': 'szkoła podstawowa',
+        'address': 'ul. Stawowa 28',
+        'zipcode': '64-061 Kamieniec'
+    },
+    {
+        'name': 'Szkoła Podstawowa w Bielawach',
+        'sort': 'szkoła podstawowa',
+        'address': 'Bielawy 3',
+        'zipcode': '62-066 Granowo'
+    },
+    {
+        'name': 'Szkoła Podstawowa w Konojadzie',
+        'sort': 'szkoła podstawowa',
+        'address': 'Konojad, ul. Szkolna  15',
+        'zipcode': '64-060 Wolkowo'
+    },
+    {
+        'name': 'Szkoła Podstawowa w Parzęczewie',
+        'sort': 'szkoła podstawowa',
+        'address': 'Parzęczewo 25',
+        'zipcode': '64-061 Kamieniec'
+    },
+    {
+        'name': 'Szkoła Podstawowa w Grąblewie',
+        'sort': 'szkoła podstawowa',
+        'address': 'Grąblewo 22',
+        'zipcode': '62-065 Grodzisk Wlkp.'
+    },
+    {
+        'name': 'Szkoła Podstawowa w Kąkolewie',
+        'sort': 'szkoła podstawowa',
+        'address': 'Kąkolewo 64',
+        'zipcode': '62-065 Grodzisk Wlkp.'
+    },
+    {
+        'name': 'Szkoła Podstawowa w Słocinie',
+        'sort': 'szkoła podstawowa',
+        'address': 'Słocin 106',
+        'zipcode': '62-065 Grodzisk Wlkp.'
+    },
+    {
+        'name': 'Zespół Szkół w Ptaszkowie',
+        'sort': 'szkoła podstawowa',
+        'address': 'Ptaszkowo 31 A',
+        'zipcode': '62-065 Grodzisk Wlkp.'
+    },
+    {
+        'name': 'Szkoła Podstawowa w Wilkowie Polskim',
+        'sort': 'szkoła podstawowa',
+        'address': 'Wilkowo Polskie, ul. Kościańska 2',
+        'zipcode': '64-050 Wielichowo'
+    },
+    {
+        'name': 'Szkoła Podstawowa w Wilkowie Polskim – filia w Śniatach',
+        'sort': 'szkoła podstawowa',
+        'address': 'Śniaty ul. Szkolna 3',
+        'zipcode': '64-050 Wielichowo'
+    },
+    {
+        'name': 'Szkoła Podstawowa w Gradowicach',
+        'sort': 'szkoła podstawowa',
+        'address': 'Gradowice, ul. Szkolna 20',
+        'zipcode': '64-050 Wielichowo'
+    },
+    {
+        'name': 'Szkoła Podstawowa w Łubnicy',
+        'sort': 'szkoła podstawowa',
+        'address': 'Łubnica ul. Szkolna 4',
+        'zipcode': '64-050 Wielichowo'
+    },
+    {
+        'name': 'Zespół Szkół w Wielichowie',
+        'sort': 'szkoła podstawowa',
+        'address': 'ul. Kościelna 7a',
+        'zipcode': '64-050 Wielichowo'
+    },
+    {
+        'name': 'Niepubliczna Szkoła Podstawowa w Grodzisku Wielkopolskim',
+        'sort': 'szkoła podstawowa',
+        'address': 'ul. Żwirowa 15a',
+        'zipcode': '62-065 Grodzisk Wlkp.'
+    },
+    {
+        'name': 'Przedszkole Gminne w Grodzisku Wlkp.',
+        'sort': 'przedszkole',
+        'address': 'ul. Chopina 24',
+        'zipcode': '62-065 Grodzisk Wlkp.'
+    },
+    {
+        'name': 'Publiczne Przedszkole "Chatka Puchatka" w Grodzisku Wlkp.',
+        'sort': 'przedszkole',
+        'address': 'ul. Winna 12',
+        'zipcode': '62-065 Grodzisk Wlkp.'
+    },
+    {
+        'name': 'Zespół Przedszkolno – Szkolny w Rostarzewie',
+        'sort': 'przedszkole',
+        'address': 'ul. Rakoniewicka 23',
+        'zipcode': '62-068 Rostarzewo'
+    },
+    {
+        'name': 'Przedszkole w Rakoniewicach',
+        'sort': 'przedszkole',
+        'address': 'ul. Garbary 8',
+        'zipcode': '62-067 Rakoniewice'
+    },
+    {
+        'name': 'Zespół Szkolno – Przedszkolny w Jabłonnie',
+        'sort': 'przedszkole',
+        'address': 'ul. Nowotomyska 9',
+        'zipcode': '64-308 Jabłonna'
+    },
+    {
+        'name': 'Zespół Przedszkolno-Szkolny w Ruchocicach',
+        'sort': 'przedszkole',
+        'address': 'ul. Poznańska 23',
+        'zipcode': '62-073 Ruchocice'
+    },
+    {
+        'name': 'Zespół Szkolno – Przedszkolny w Granowie',
+        'sort': 'przedszkole',
+        'address': 'ul. Konstytucji 3 Maja 1a',
+        'zipcode': '62-066 Granowo'
+    },
+    {
+        'name': 'Zespół Przedszkolno – Szkolny w Łąkiem',
+        'sort': 'przedszkole',
+        'address': 'Łąkie 81',
+        'zipcode': '62-068 Rostarzewo'
+    },
+    {
+        'name': 'Przedszkole Gminne w Kamieńcu',
+        'sort': 'przedszkole',
+        'address': 'ul. Szkolna 2',
+        'zipcode': '64-061 Kamieniec'
+    },
+    {
+        'name': 'Przedszkole w Wilkowie Polskim',
+        'sort': 'przedszkole',
+        'address': 'Wilkowo Polskie, ul. Główna 1',
+        'zipcode': '64-050 Wielichowo'
+    },
+    {
+        'name': 'Przedszkole w Śniatach',
+        'sort': 'przedszkole',
+        'address': 'Śniaty, ul. Ratajczaka 8',
+        'zipcode': '64-050 Wielichowo'
+    },
+    {
+        'name': 'Przedszkole w Łubnicy',
+        'sort': 'przedszkole',
+        'address': 'Łubnica, ul. Dożynkowa 4',
+        'zipcode': '64-050 Wielichowo'
+    },
+    {
+        'name': 'Przedszkole w Wielichowie',
+        'sort': 'przedszkole',
+        'address': 'Wielichowo, ul. Kościelna 2',
+        'zipcode': '64-050 Wielichowo'
+    },
+    {
+        'name': 'Przedszkole "Świat Bajek" w Wielichowie',
+        'sort': 'przedszkole',
+        'address': 'Wielichowo, ul. Łąkowa 66',
+        'zipcode': '64-050 Wielichowo'
+    },
+    {
+        'name': '"Bobo- Wiercipięta" Prywatne przedszkole i żłobek',
+        'sort': 'przedszkole',
+        'address': 'ul. Winna 30',
+        'zipcode': '62-065 Grodzisk Wlkp.'
+    },
+    {
+        'name': 'Prywatne Przedszkole "Wiercipięta"',
+        'sort': 'przedszkole',
+        'address': 'os. Wojska Polskiego 110',
+        'zipcode': '62-065 Grodzisk Wlkp.'
+    },
+    {
+        'name': 'Zespół Szkół Ponadgimnazjalnych w Grodzisku Wlkp.',
+        'sort': 'zasadnicza szkoła zawodowa',
+        'address': 'ul. Żwirki i Wigury 2',
+        'zipcode': '62-065 Grodzisk Wlkp.'
+    },
+    {
+        'name': 'Zespół Szkół Ponadgimnazjalnych w Grodzisku Wlkp.',
+        'sort': 'technikum',
+        'address': 'ul. Żwirki i Wigury 2',
+        'zipcode': '62-065 Grodzisk Wlkp.'
+    },
+    {
+        'name': 'Liceum Ogólnokształcące w Grodzisku Wlkp.',
+        'sort': 'liceum ogólnokształcące',
+        'address': 'ul. 3 Maja 7',
+        'zipcode': '62-065 Grodzisk Wlkp'
+    },
+    {
+        'name': 'Ośrodek Rehabilitacyjno - Edukacyjno Wychowawczy',
+        'sort': 'inne',
+        'address': 'Sielinko, ul. Opalenicka 4',
+        'zipcode': '64-330 Opalenica'
+    },
+    {
+        'name': 'Specjalny Ośrodek Szkolno - Wychowawczy w Rydzynie',
+        'sort': 'zasadnicza szkoła zawodowa',
+        'address': 'Plac Zamkowy 2',
+        'zipcode': '64-130 Rydzyna'
+    },
+    {'name': '-', 'sort': 'inne', 'address': '-', 'zipcode': '-'}
 ]
