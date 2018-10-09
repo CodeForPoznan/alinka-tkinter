@@ -2,6 +2,8 @@ import re
 from tkinter import Entry, Label, StringVar
 from tkinter.ttk import Labelframe, Combobox
 
+from backend.database import School
+
 
 class StudentData(Labelframe):
 
@@ -182,11 +184,16 @@ class StudentData(Labelframe):
 
     def list_of_schools(self):
         sort = self.sort_of_school_box.get()
-        self.school['values'] = self.base.select_school(sort)
+        self.school['values'] = [
+            i.name
+            for i in School.select().where(School.sort == sort)
+        ]
         self.school.select_clear()
 
     def list_of_sorts(self):
-        self.sort_of_school_box['values'] = self.base.sort_of_school()
+        self.sort_of_school_box['values'] = sorted(
+            i.sort for i in School.select().distinct()
+        )
 
     def clear_all_selection(self, event):
         self.school.select_clear()
