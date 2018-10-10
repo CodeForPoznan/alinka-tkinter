@@ -246,41 +246,27 @@ class StudentData(Labelframe):
         if 0 >= int(month) >= 13 or 0 >= int(day) >= 31:
             return "wrong PESEL"
         if len(month) == 1:
-            month = "0"+month
+            month = "0" + month
         return ".".join([day, month, year])
 
     def insert_actual_data(self, student):
         '''insert data into form'''
-        # insert entries
-        for entry, key in zip([
-            self.name_of_student_n_entry,
-            self.name_of_student_g_entry,
-            self.pesel_entry,
-            self.birth_place_entry,
-            self.id_of_student_entry,
-            self.zip_code_of_student_entry,
-            self.city_of_student_entry,
-            self.address_of_student_entry,
-            self.profession_entry,
-            self.class_entry,
-            self.sort_of_school_box,
-            self.school
-        ], [
-            'name_n',
-            'name_g',
-            'pesel',
-            'birth_place',
-            'casebook',
-            'zip_code',
-            'city',
-            'address',
-            'profession',
-            'class',
-            'school_sort',
-            'school_name'
-        ]):
+        for key, entry in {
+            'name_n': self.name_of_student_n_entry,
+            'name_g': self.name_of_student_g_entry,
+            'pesel': self.pesel_entry,
+            'birth_place': self.birth_place_entry,
+            'casebook': self.id_of_student_entry,
+            'zip_code': self.zip_code_of_student_entry,
+            'city': self.city_of_student_entry,
+            'address': self.address_of_student_entry,
+            'profession': self.profession_entry,
+            'class_': self.class_entry,
+            'school_sort': self.sort_of_school_box,
+            'school_name': self.school
+        }:
             entry.delete(0, 'end')
-            entry.insert(0, student[key])
+            entry.insert(0, getattr(student, key))
 
     def clear(self):
         for entry in [
