@@ -18,7 +18,11 @@ class SettingsWindow():
 
         self.name_label_frame = LabelFrame(self.window, text="Nazwa poradni")
         self.name_label_frame.grid(row=0, column=0)
-        self.name_text = Entry(self.name_label_frame, width=50, textvariable=self.name)
+        self.name_text = Entry(
+            self.name_label_frame,
+            width=50,
+            textvariable=self.name
+        )
         self.name_text.grid(row=0, column=0)
         self.name_accept_button = Button(
             self.name_label_frame,
@@ -95,7 +99,7 @@ class SettingsWindow():
         for fieldname, value in config.items():
             if fieldname == "name":
                 self.name.set(value)
-    
+
     def save_config_data(self):
         config_dir = os.path.dirname(os.path.abspath(__name__))
         config_file = "alinka.ini"
@@ -104,21 +108,18 @@ class SettingsWindow():
         config.add_section('Center')
         config.set('Center', 'name', self.name.get())
         config.write(file)
-        self.name_accept_button['state']='disabled'
+        self.name_accept_button['state'] = 'disabled'
 
     def track_changes(self, event, *args):
         '''track if name in entry has been changed'''
-        try:
+        if 'name' in self.config.items():
             if self.name.get() == self.config['name']:
                 self.name_accept_button.config(state='disabled')
             else:
                 self.name_accept_button.config(state='active')
-        except:
-            pass
 
-    
     def read_config(self):
-        init={}
+        init = {}
         directory = os.path.dirname(os.path.abspath(__name__))
         init_file = os.path.join(directory, "alinka.ini")
         config = ConfigParser()
@@ -130,8 +131,8 @@ class SettingsWindow():
             for section in sections:
                 options = config.options(section)
                 for option in options:
-                    init[option] = config.get(section, option)                    
+                    init[option] = config.get(section, option)
         return init
-    
+
     def close(self):
         self.window.destroy()
