@@ -243,7 +243,7 @@ class StudentData(Labelframe):
         else:
             return "wrong PESEL"
         day = pesel[4:6]
-        if 0 >= int(month) >= 13 or 0 >= int(day) >= 31:
+        if 0 >= int(month) >= 13 or 0 >= int(day) >= 32:
             return "wrong PESEL"
         if len(month) == 1:
             month = "0"+month
