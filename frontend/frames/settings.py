@@ -1,4 +1,7 @@
-from tkinter import Button, Frame, LabelFrame, Text, Toplevel
+import os
+from configparser import ConfigParser
+
+from tkinter import Button, END, Entry, Frame, LabelFrame, StringVar, Toplevel
 from tkinter.font import Font
 from tkinter.ttk import Treeview
 
@@ -8,12 +11,14 @@ class SettingsWindow():
     def __init__(self, window, base, **kwargs):
         self.window = window
         self.base = base
+        self.config = self.read_config()
+        self.name = StringVar()
+        self.name.trace('w', self.track_changes)
         self.my_font = Font(size=16)
 
         self.name_label_frame = LabelFrame(self.window, text="Nazwa poradni")
         self.name_label_frame.grid(row=0, column=0)
-
-        self.name_text = Text(self.name_label_frame, height=5, width=57)
+        self.name_text = Entry(self.name_label_frame, width=50, textvariable=self.name)
         self.name_text.grid(row=0, column=0)
         self.name_accept_button = Button(
             self.name_label_frame,
@@ -83,6 +88,42 @@ class SettingsWindow():
             command=self.close
         )
         self.close_button.grid(row=3, column=0)
+        self.insert_config_data(self.config)
 
+    def insert_config_data(self, config):
+        for fieldname, value in config.items():
+            if fieldname == "name":
+                print(value)
+                self.name.set(value)
+
+    def track_changes(self, event, *args):
+        '''track if name in entry has been changed'''
+        try:
+            if self.name.get() == self.config['name']:
+                self.name_accept_button.config(state='disabled')
+            else:
+                self.name_accept_button.config(state='active')
+        except:
+            pass
+
+    
+    def read_config(self):
+        init={}
+        directory = os.path.dirname(os.path.abspath(__name__))
+        init_file = os.path.join(directory, "alinka.ini")
+        print(init_file)
+        config = ConfigParser()
+        config.read(init_file)
+        sections = config.sections()
+        if not sections:
+            return {}
+
+        else:
+            for section in sections:
+                options = config.options(section)
+                for option in options:
+                    init[option] = config.get(section, option)                    
+        return init
+    
     def close(self):
         self.window.destroy()
