@@ -219,7 +219,7 @@ class MainWindow():
                 staffmeeting_data
             )
             self.actual_student.insert_actual_data(
-                self.base.get_student_data(id=student_id)
+                Student.get(Student.id_ == student_id)
             )
             self.applicationframe.insert_application_data(
                 staffmeeting_data
@@ -235,7 +235,7 @@ class MainWindow():
             student_pesel = '0' + student_pesel
         elif len(student_pesel) == 9:
             student_pesel = '00' + student_pesel
-        student_data = self.base.get_student_data(pesel=student_pesel)
+        student_data = Student.get(Student.pesel == student_pesel)
         self.actual_student.insert_actual_data(student_data)
 
     def copy_address(self, event):

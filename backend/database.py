@@ -112,32 +112,6 @@ class DataBase:
             profession=values['profession']
         ).save()
 
-    def get_student_data(self, pesel="", id=""):
-        '''return dict of student data.'''
-        if pesel:
-            student = Student.get(Student.pesel == pesel)
-        else:
-            student = Student.get(Student.id == id)
-
-        return {
-            'id': student.id,
-            'name_n': student.name_n,
-            'name_g': student.name_g,
-            'zip_code': student.zip_code,
-            'city': student.city,
-            'address': student.address,
-            'pesel': student.pesel,
-            'birth_date': student.birth_date,
-            'birth_place': student.birth_place,
-            'casebook': student.casebook,
-            'school_name': student.school_name,
-            'school_sort': student.school_sort,
-            'school_address': student.school_address,
-            'school_city': student.school_city,
-            'class': student.class_,
-            'profession': student.profession,
-        }
-
     def update_student(self, values):
         student = Student.get(Student.pesel == values['pesel'])
         student.name_n = values['name_n']
