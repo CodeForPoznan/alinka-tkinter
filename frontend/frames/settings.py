@@ -22,7 +22,8 @@ class SettingsWindow():
         self.name_text.grid(row=0, column=0)
         self.name_accept_button = Button(
             self.name_label_frame,
-            text="Zachowaj"
+            text="Zachowaj",
+            command=self.save_config_data
         )
         self.name_accept_button.grid(row=1, column=0)
 
@@ -93,8 +94,17 @@ class SettingsWindow():
     def insert_config_data(self, config):
         for fieldname, value in config.items():
             if fieldname == "name":
-                print(value)
                 self.name.set(value)
+    
+    def save_config_data(self):
+        config_dir = os.path.dirname(os.path.abspath(__name__))
+        config_file = "alinka.ini"
+        file = open(os.path.join(config_dir, config_file), 'w')
+        config = ConfigParser()
+        config.add_section('Center')
+        config.set('Center', 'name', self.name.get())
+        config.write(file)
+        self.name_accept_button['state']='disabled'
 
     def track_changes(self, event, *args):
         '''track if name in entry has been changed'''
@@ -111,13 +121,11 @@ class SettingsWindow():
         init={}
         directory = os.path.dirname(os.path.abspath(__name__))
         init_file = os.path.join(directory, "alinka.ini")
-        print(init_file)
         config = ConfigParser()
         config.read(init_file)
         sections = config.sections()
         if not sections:
             return {}
-
         else:
             for section in sections:
                 options = config.options(section)
