@@ -1,8 +1,7 @@
-import sqlite3
 from collections import OrderedDict
 from os.path import abspath, dirname, isfile, join
 
-from peewee import Model, SqliteDatabase, TextField
+from peewee import IntegerField, Model, SqliteDatabase, TextField
 
 from backend.fixtures import staff, places
 
@@ -53,53 +52,46 @@ class Student(Model):
     profession = TextField()
 
 
+class StaffMeeting(Model):
+
+    class Meta:
+        database = DB
+
+    date = TextField()
+    member1 = IntegerField()
+    member2 = IntegerField()
+    member3 = IntegerField()
+    member4 = IntegerField()
+    member5 = IntegerField()
+    member6 = IntegerField()
+    member7 = IntegerField()
+    member8 = IntegerField()
+    member9 = IntegerField()
+    subject = TextField()
+    reason = TextField()
+    applicant_n = TextField()
+    applicant_g = TextField()
+    applicant_zipcode = TextField()
+    applicant_city = TextField()
+    applicant_address = TextField()
+    timespan = TextField()
+    timespan_ind = TextField()
+    student = IntegerField()
+
+
 class DataBase:
 
     def __init__(self):
-        self.empty_database = not isfile(DB_PATH)
-        self.conection = sqlite3.connect(DB_PATH)
-        self.cur = self.conection.cursor()
-
-        if self.empty_database:
+        if not isfile(DB_PATH):
             DB.connect()
-            DB.create_tables([School, Staff, Student])
-
-            self.cur.execute(
-                '''CREATE TABLE IF NOT EXISTS staffmeeting (
-                id INTEGER PRIMARY KEY,
-                date TEXT,
-                member1 INTEGER,
-                member2 INTEGER,
-                member3 INTEGER,
-                member4 INTEGER,
-                member5 INTEGER,
-                member6 INTEGER,
-                member7 INTEGER,
-                member8 INTEGER,
-                member9 INTEGER,
-                subject TEXT,
-                reason TEXT,
-                applicant_n TEXT,
-                applicant_g TEXT,
-                applicant_zipcode TEXT,
-                applicant_city TEXT,
-                applicant_address TEXT,
-                timespan TEXT,
-                timespan_ind TEXT,
-                student INTEGER
-                )'''
-            )
-
+            DB.create_tables([School, Staff, StaffMeeting, Student])
             self.add_fake_data()
-            self.conection.commit()
 
     def add_fake_data(self):
         for i in staff:
             Staff(**i).save()
         for i in places:
             School(**i).save()
-
-        self.conection.commit()
 
     def add_student_to_db(self, values):
         Student(
@@ -166,138 +158,56 @@ class DataBase:
 
     def delete_student(self, pesel):
         student = Student.get(Student.pesel == pesel)
-        self.cur.execute(
-            '''
-            DELETE FROM staffmeeting
-            WHERE student=?
-            ''', (student.id,)
-        )
-        self.conection.commit()
+        StaffMeeting.delete().where(StaffMeeting.student == student.id)
         student.delete_instance()
 
     def add_staffmeeting(self, values):
-        '''
-        Add new staffmeeting to database
-        '''
-        student_id = Student.get(Student.pesel == values['pesel']).id
-        staff = [
-            values['staff_meeting_date']
-        ] + self.convert_staff_to_id(values['staff']['team'])
-        for i in [
-            values['subject'],
-            values['reason'][1] + ", " + values['reason'][2],
-            values['applicant_n'],
-            values['applicant_g'],
-            values['applicant_zipcode'],
-            values['applicant_city'],
-            values['applicant_address'],
-            values['timespan'],
-            values['timespan_ind'],
-            student_id
-        ]:
-            staff.append(i)
-
-        self.cur.execute(
-            '''INSERT INTO staffmeeting VALUES(
-            NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ''', staff
+        """Add new staffmeeting to database."""
+        staff_meeting = StaffMeeting(
+            date=values['staff_meeting_date'],
+            subject=values['subject'],
+            reason=values['reason'][1] + ", " + values['reason'][2],
+            applicant_n=values['applicant_n'],
+            applicant_g=values['applicant_g'],
+            applicant_zipcode=values['applicant_zipcode'],
+            applicant_city=values['applicant_city'],
+            applicant_address=values['applicant_address'],
+            timespan=values['timespan'],
+            timespan_ind=values['timespan_ind'],
+            student=Student.get(Student.pesel == values['pesel']).id
         )
-        self.conection.commit()
+
+        team = values['staff']['team']
+        for i, member in enumerate(self.convert_staff_to_id(team), 1):
+            setattr(staff_meeting, 'member{}'.format(i), member)
+
+        staff_meeting.save()
 
     def update_staffmeeting(self, values):
-        student_id = Student.get(Student.pesel == values['pesel']).id
-        staff = self.convert_staff_to_id(values['staff']['team'])
-        for i in [
-            values['applicant_n'],
-            values['applicant_g'],
-            values['applicant_zipcode'],
-            values['applicant_city'],
-            values['applicant_address'],
-            values['reason'][1] + ", " + values['reason'][2],
-            values['timespan'],
-            values['timespan_ind'],
-            values['staff_meeting_date'],
-            values['subject'],
-            student_id
-        ]:
-            staff.append(i)
-
-        self.cur.execute(
-            '''
-            UPDATE staffmeeting
-            SET
-                member1=?,
-                member2=?,
-                member3=?,
-                member4=?,
-                member5=?,
-                member6=?,
-                member7=?,
-                member8=?,
-                member9=?,
-                applicant_n=?,
-                applicant_g=?,
-                applicant_zipcode=?,
-                applicant_city=?,
-                applicant_address=?,
-                reason=?,
-                timespan=?,
-                timespan_ind=?
-            WHERE
-                date=? AND subject=? AND student=?
-            ''', staff
+        staff_meeting = StaffMeeting.get(
+            StaffMeeting.date == values['staff_meeting_date'],
+            StaffMeeting.subject == values['subject'],
+            StaffMeeting.student == Student.get(
+                Student.pesel == values['pesel']
+            ).id
         )
-        self.conection.commit()
 
-    def delete_from_staffmeeting(self, staffmeeting_id):
-        self.cur.execute(
-            '''
-            DELETE FROM staffmeeting
-            WHERE id=?''', (staffmeeting_id,)
+        staff_meeting.applicant_n = values['applicant_n']
+        staff_meeting.applicant_g = values['applicant_g']
+        staff_meeting.applicant_zipcode = values['applicant_zipcode']
+        staff_meeting.applicant_city = values['applicant_city']
+        staff_meeting.applicant_address = values['applicant_address']
+        staff_meeting.reason = (
+            values['reason'][1] + ", " + values['reason'][2]
         )
-        self.conection.commit()
+        staff_meeting.timespan = values['timespan'],
+        staff_meeting.timespan_ind = values['timespan_ind']
 
-    def staff_meeting_list(self):
-        '''get tuple with id, date, ids of stuff, student'''
-        self.cur.execute('''SELECT * FROM staffmeeting''')
-        return self.cur.fetchall()
+        team = values['staff']['team']
+        for i, member in enumerate(self.convert_staff_to_id(team), 1):
+            setattr(staff_meeting, 'member{}'.format(i), member)
 
-    def select_meeting(self, id):
-        '''select meeting from list of staffmeetings'''
-
-        self.cur.execute('''
-            SELECT *
-            FROM staffmeeting
-            WHERE id=?
-            ''', (id,)
-        )
-        return self.cur.fetchall()[0]
-
-    def look_for_staffmeeting(self, date, student_id):
-        '''return id of staffmeeting'''
-        self.cur.execute('''
-            SELECT id
-            FROM staffmeeting
-            WHERE date=? AND student=?
-            ''', (date, student_id)
-        )
-        a = self.cur.fetchone()
-        return a[0]
-
-    def convert_to_staff(self, id):
-        '''convert id of staffmeeting into dict
-        with important keys:
-        ['date'] - containing staff meeting date
-        ['team'] - containing staff meeting team data,
-           eg. [[name, speciality], [name, speciality]].
-        '''
-        staff_data = list(self.select_meeting(id))
-        staff = {}
-        staff['date'] = staff_data[1]
-        who_meets = [x for x in staff_data[2:-1] if x is not None]
-
-        staff['team'] = [Staff.get(id=x).name for x in who_meets]
-        return staff
+        staff_meeting.save()
 
     def convert_staff_to_id(self, staff_data_list):
         '''convert staff_data_list from
@@ -326,38 +236,30 @@ class DataBase:
         '''
         return dict of staffmeeting data
         '''
-        self.cur.execute(
-            '''
-            SELECT *
-            FROM staffmeeting
-            WHERE id=?
-            ''', (staffmeeting_id,)
-        )
-        staffmeeting_data = dict(
-            zip([
-                'id',
-                'date',
-                'member1',
-                'member2',
-                'member3',
-                'member4',
-                'member5',
-                'member6',
-                'member7',
-                'member8',
-                'member9',
-                'subject',
-                'reason',
-                'applicant_n',
-                'applicant_g',
-                'applicant_zipcode',
-                'applicant_city',
-                'applicant_address',
-                'timespan',
-                'timespan_ind',
-                'student'
-            ], self.cur.fetchall()[0])
-        )
+        staff_meeting = StaffMeeting.get(StaffMeeting.id == staffmeeting_id)
+        staffmeeting_data = {
+            'id': staff_meeting.id,
+            'date': staff_meeting.date,
+            'member1': staff_meeting.member1,
+            'member2': staff_meeting.member2,
+            'member3': staff_meeting.member3,
+            'member4': staff_meeting.member4,
+            'member5': staff_meeting.member5,
+            'member6': staff_meeting.member6,
+            'member7': staff_meeting.member7,
+            'member8': staff_meeting.member8,
+            'member9': staff_meeting.member9,
+            'subject': staff_meeting.subject,
+            'reason': staff_meeting.reason,
+            'applicant_n': staff_meeting.applicant_n,
+            'applicant_g': staff_meeting.applicant_g,
+            'applicant_zipcode': staff_meeting.applicant_zipcode,
+            'applicant_city': staff_meeting.applicant_city,
+            'applicant_address': staff_meeting.applicant_address,
+            'timespan': staff_meeting.timespan,
+            'timespan_ind': staff_meeting.timespan_ind,
+            'student': staff_meeting.student
+        }
         # convert member id to his name and speciality
         staffmeeting_data['team'] = []
         staff = [
@@ -389,17 +291,15 @@ class DataBase:
         return OrderedDict(sorted(students.items(), key=lambda t: t[1]))
 
     def staffmeeting_exists(self, values):
-        student_id = Student.get(Student.pesel == values['pesel']).id
-        subject = values['subject']
-        date = values['staff_meeting_date']
-        self.cur.execute(
-            '''
-            SELECT 1
-            FROM staffmeeting
-            WHERE date=? AND subject=? AND student=?
-            ''', (date, subject, student_id)
-        )
-        if self.cur.fetchone():
-            return 1
+        try:
+            StaffMeeting.get(
+                StaffMeeting.date == values['staff_meeting_date'],
+                StaffMeeting.subject == values['subject'],
+                StaffMeeting.student == Student.get(
+                    Student.pesel == values['pesel']
+                ).id
+            )
+        except StaffMeeting.DoesNotExist:
+            return False
         else:
-            return 0
+            return True
