@@ -1,13 +1,14 @@
-from tkinter import Button, Frame, LabelFrame, Text, Toplevel
+from tkinter import Button, Frame, LabelFrame, Text
 from tkinter.font import Font
 from tkinter.ttk import Treeview
 
 
-class SettingsWindow():
+class SettingsWindow:
+
     '''Toplevel widget for settings - name of center, specialist, schools'''
-    def __init__(self, window, base, **kwargs):
+
+    def __init__(self, window, **kwargs):
         self.window = window
-        self.base = base
         self.my_font = Font(size=16)
 
         self.name_label_frame = LabelFrame(self.window, text="Nazwa poradni")

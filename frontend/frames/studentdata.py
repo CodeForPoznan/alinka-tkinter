@@ -8,7 +8,7 @@ class ListOfData(Labelframe):
     """Contains list of student in database"""
 
     def __init__(self, window, base, **kwargs):
-        Labelframe.__init__(self, window, **kwargs)
+        super().__init__(window, **kwargs)
         self.base = base
         self.notebook = Notebook(self)
         self.notebook.grid(row=0, column=0, padx=5, pady=5)

@@ -13,7 +13,7 @@ from .values import (
     recommend_special_education
 )
 
-from backend.database import DataBase, School, Student
+from backend.database import DataBase, School, StaffMeeting, Student
 from backend.create import Decision
 from backend.create_decree import Decree
 from backend.create_protokol import Protokol
@@ -25,7 +25,7 @@ from frontend.frames.staffframe import StaffFrame
 from frontend.frames.studentdata import ListOfData
 
 
-class MainWindow():
+class MainWindow:
 
     def __init__(self, window):
         self.base = DataBase()
@@ -38,11 +38,7 @@ class MainWindow():
             self.select_student
         )
 
-        self.actual_student = StudentData(
-            self.window,
-            self.base,
-            text="Dane dziecka"
-        )
+        self.actual_student = StudentData(self.window, text="Dane dziecka")
         self.actual_student.grid(
             row=0,
             column=1,
@@ -59,8 +55,7 @@ class MainWindow():
         self.applicationframe.same.bind('<Button-1>', self.copy_address)
         self.staff_meeting_frame = StaffFrame(
             self.window,
-            self.base,
-            text="Zespół orzekający"
+            text="Zespół orzekający",
         )
         self.staff_meeting_frame.grid(
             row=0,
@@ -70,12 +65,9 @@ class MainWindow():
             padx=5
         )
 
-        self.staff_meeting_frame.insert_staff(
-            self.base,
-            staff={'team': [], 'id': ""}
-        )
+        self.staff_meeting_frame.insert_staff(staff={'team': [], 'id': ""})
 
-        self.button_frame = ButtonFrame(self.window, self.base)
+        self.button_frame = ButtonFrame(self.window)
         self.button_frame.grid(row=2, column=1, columnspan=2)
 
         self.button_frame.settings_button.bind('<Button-1>', self.settings)
@@ -115,21 +107,81 @@ class MainWindow():
 
         # Update/Create student
         try:
-            Student.get(Student.pesel == values['pesel'])
+            student = Student.get(Student.pesel == values['pesel'])
+            student.name_n = values['name_n']
+            student.name_g = values['name_g']
+            student.zip_code = values['zip_code']
+            student.city = values['city']
+            student.address = values['address']
+            student.birth_date = values['birth_date']
+            student.birth_place = values['birth_place']
+            student.casebook = values['casebook']
+            student.school_name = values['school_name']
+            student.school_sort = values['school_sort']
+            student.school_address = values['school_address']
+            student.school_city = values['school_city']
+            student.class_ = values['class']
+            student.profession = values['profession']
         except Student.DoesNotExist:
-            self.base.add_student_to_db(self.values())
-        else:
-            self.base.update_student(self.values())
+            student = Student(
+                name_n=values['name_n'],
+                name_g=values['name_g'],
+                zip_code=values['zip_code'],
+                city=values['city'],
+                address=values['address'],
+                pesel=values['pesel'],
+                birth_date=values['birth_date'],
+                birth_place=values['birth_place'],
+                casebook=values['casebook'],
+                school_name=values['school_name'],
+                school_sort=values['school_sort'],
+                school_address=values['school_address'],
+                school_city=values['school_city'],
+                class_=values['class'],
+                profession=values['profession']
+            )
+        student.save()
 
         # Update/create staffmeeting
         # Staffmeeting is reconized as "the same" if its date,
         # student and subject is the same
-        if self.base.staffmeeting_exists(values):
-            self.base.update_staffmeeting(values)
-            # zaktualizowano staffmeeting
-        else:
-            self.base.add_staffmeeting(values)
-            # dodano nowy staffmeeting
+        try:
+            staff_meeting = StaffMeeting.get(
+                StaffMeeting.date == values['staff_meeting_date'],
+                StaffMeeting.subject == values['subject'],
+                StaffMeeting.student == student.id
+            )
+            staff_meeting.applicant_n = values['applicant_n']
+            staff_meeting.applicant_g = values['applicant_g']
+            staff_meeting.applicant_zipcode = values['applicant_zipcode']
+            staff_meeting.applicant_city = values['applicant_city']
+            staff_meeting.applicant_address = values['applicant_address']
+            staff_meeting.reason = (
+                values['reason'][1] + ", " + values['reason'][2]
+            )
+            staff_meeting.timespan = values['timespan'],
+            staff_meeting.timespan_ind = values['timespan_ind']
+        except StaffMeeting.DoesNotExist:
+            staff_meeting = StaffMeeting(
+                date=values['staff_meeting_date'],
+                subject=values['subject'],
+                reason=values['reason'][1] + ", " + values['reason'][2],
+                applicant_n=values['applicant_n'],
+                applicant_g=values['applicant_g'],
+                applicant_zipcode=values['applicant_zipcode'],
+                applicant_city=values['applicant_city'],
+                applicant_address=values['applicant_address'],
+                timespan=values['timespan'],
+                timespan_ind=values['timespan_ind'],
+                student=student.id
+            )
+
+        team = values['staff']['team']
+        for i, member in enumerate(self.convert_staff_to_id(team), 1):
+            setattr(staff_meeting, 'member{}'.format(i), member)
+        staff_meeting.save()
+
+        # dodano nowy staffmeeting
         self.notebook.fill_student_list()
         self.notebook.fill_staffmeeting_list()
 
@@ -214,10 +266,7 @@ class MainWindow():
             student_id = self.notebook.table.item(item)['values'][2]
             staff_id = self.notebook.table.item(item)['values'][1]
             staffmeeting_data = self.base.get_staffmeeting_data(staff_id)
-            self.staff_meeting_frame.insert_staff(
-                self.base,
-                staffmeeting_data
-            )
+            self.staff_meeting_frame.insert_staff(staffmeeting_data)
             self.actual_student.insert_actual_data(
                 Student.get(Student.id_ == student_id)
             )
@@ -380,7 +429,7 @@ class MainWindow():
         '''Toplevel window for setup'''
         new_window = Toplevel()
         new_window.title("Ustawienia")
-        self.settings_window = SettingsWindow(new_window, self.base)
+        self.settings_window = SettingsWindow(new_window)
 
     def fake_data(self):
         self.actual_student.name_of_student_n_entry.insert(
