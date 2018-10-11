@@ -93,95 +93,10 @@ class DataBase:
         for i in places:
             School(**i).save()
 
-    def add_student_to_db(self, values):
-        Student(
-            name_n=values['name_n'],
-            name_g=values['name_g'],
-            zip_code=values['zip_code'],
-            city=values['city'],
-            address=values['address'],
-            pesel=values['pesel'],
-            birth_date=values['birth_date'],
-            birth_place=values['birth_place'],
-            casebook=values['casebook'],
-            school_name=values['school_name'],
-            school_sort=values['school_sort'],
-            school_address=values['school_address'],
-            school_city=values['school_city'],
-            class_=values['class'],
-            profession=values['profession']
-        ).save()
-
-    def update_student(self, values):
-        student = Student.get(Student.pesel == values['pesel'])
-        student.name_n = values['name_n']
-        student.name_g = values['name_g']
-        student.zip_code = values['zip_code']
-        student.city = values['city']
-        student.address = values['address']
-        student.birth_date = values['birth_date']
-        student.birth_place = values['birth_place']
-        student.casebook = values['casebook']
-        student.school_name = values['school_name']
-        student.school_sort = values['school_sort']
-        student.school_address = values['school_address']
-        student.school_city = values['school_city']
-        student.class_ = values['class']
-        student.profession = values['profession']
-        student.save()
-
     def delete_student(self, pesel):
         student = Student.get(Student.pesel == pesel)
         StaffMeeting.delete().where(StaffMeeting.student == student.id)
         student.delete_instance()
-
-    def add_staffmeeting(self, values):
-        """Add new staffmeeting to database."""
-        staff_meeting = StaffMeeting(
-            date=values['staff_meeting_date'],
-            subject=values['subject'],
-            reason=values['reason'][1] + ", " + values['reason'][2],
-            applicant_n=values['applicant_n'],
-            applicant_g=values['applicant_g'],
-            applicant_zipcode=values['applicant_zipcode'],
-            applicant_city=values['applicant_city'],
-            applicant_address=values['applicant_address'],
-            timespan=values['timespan'],
-            timespan_ind=values['timespan_ind'],
-            student=Student.get(Student.pesel == values['pesel']).id
-        )
-
-        team = values['staff']['team']
-        for i, member in enumerate(self.convert_staff_to_id(team), 1):
-            setattr(staff_meeting, 'member{}'.format(i), member)
-
-        staff_meeting.save()
-
-    def update_staffmeeting(self, values):
-        staff_meeting = StaffMeeting.get(
-            StaffMeeting.date == values['staff_meeting_date'],
-            StaffMeeting.subject == values['subject'],
-            StaffMeeting.student == Student.get(
-                Student.pesel == values['pesel']
-            ).id
-        )
-
-        staff_meeting.applicant_n = values['applicant_n']
-        staff_meeting.applicant_g = values['applicant_g']
-        staff_meeting.applicant_zipcode = values['applicant_zipcode']
-        staff_meeting.applicant_city = values['applicant_city']
-        staff_meeting.applicant_address = values['applicant_address']
-        staff_meeting.reason = (
-            values['reason'][1] + ", " + values['reason'][2]
-        )
-        staff_meeting.timespan = values['timespan'],
-        staff_meeting.timespan_ind = values['timespan_ind']
-
-        team = values['staff']['team']
-        for i, member in enumerate(self.convert_staff_to_id(team), 1):
-            setattr(staff_meeting, 'member{}'.format(i), member)
-
-        staff_meeting.save()
 
     def convert_staff_to_id(self, staff_data_list):
         '''convert staff_data_list from
@@ -263,17 +178,3 @@ class DataBase:
             last_name = splitted_name[-1]
             students[i.pesel] = " ".join([last_name] + first_names)
         return OrderedDict(sorted(students.items(), key=lambda t: t[1]))
-
-    def staffmeeting_exists(self, values):
-        try:
-            StaffMeeting.get(
-                StaffMeeting.date == values['staff_meeting_date'],
-                StaffMeeting.subject == values['subject'],
-                StaffMeeting.student == Student.get(
-                    Student.pesel == values['pesel']
-                ).id
-            )
-        except StaffMeeting.DoesNotExist:
-            return False
-        else:
-            return True

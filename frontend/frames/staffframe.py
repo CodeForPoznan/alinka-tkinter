@@ -9,9 +9,8 @@ class StaffFrame(LabelFrame):
 
     """Contains data of staffmeeteng"""
 
-    def __init__(self, window, base, **kwargs):
+    def __init__(self, window, **kwargs):
         super().__init__(window, **kwargs)
-        self.base = base
         self.staff_id = None
         self.all_staff = [i.name for i in Staff.select()]
         self.data_label = Label(self, text="Data zespołu")
@@ -69,8 +68,7 @@ class StaffFrame(LabelFrame):
             )
         return staff_meeting_list
 
-    def insert_staff(self, base, staff):
-        self.base = base
+    def insert_staff(self, staff):
         self.staff = staff
         self.staff_id = staff['id']
         if not self.staff_id:

@@ -9,9 +9,8 @@ class StudentData(Labelframe):
 
     """Contains data of selected student"""
 
-    def __init__(self, window, base, **kwargs):
-        Labelframe.__init__(self, window, **kwargs)
-        self.base = base
+    def __init__(self, window, **kwargs):
+        super().__init__(window, **kwargs)
         self.pesel_string = StringVar()
         self.pesel_string.set('')
         self.pesel_string.trace('w', lambda *args: self.pesel_validation())
