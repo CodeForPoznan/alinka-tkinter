@@ -1,17 +1,15 @@
 from tkinter import Button, LabelFrame, Listbox
 from tkinter.ttk import Entry, Label, Treeview
 
-
-from backend.database import Staff
+from backend.database import Staff, StaffMeeting
 
 
 class StaffFrame(LabelFrame):
 
     """Contains data of staffmeeteng"""
 
-    def __init__(self, window, base, **kwargs):
+    def __init__(self, window, **kwargs):
         super().__init__(window, **kwargs)
-        self.base = base
         self.staff_id = None
         self.all_staff = [i.name for i in Staff.select()]
         self.data_label = Label(self, text="Data zespołu")
@@ -69,19 +67,27 @@ class StaffFrame(LabelFrame):
             )
         return staff_meeting_list
 
-    def insert_staff(self, base, staff):
-        self.base = base
-        self.staff = staff
-        self.staff_id = staff['id']
-        if not self.staff_id:
+    def insert_staff(self, staffmeeting_id=None):
+        self.staff_id = staffmeeting_id
+
+        if staffmeeting_id is None:
             self.tables_tidying()
             return
+
+        staff_meeting = StaffMeeting.get(StaffMeeting.id == staffmeeting_id)
         self.data_entry.delete(0, 'end')
-        self.data_entry.insert(0, staff['date'])
+        self.data_entry.insert(0, staff_meeting.date)
         self.table.delete(*self.table.get_children())
         self.another_staff.delete(0, 'end')
-        for i in staff['team']:
-            self.table.insert('', 'end', values=(i[0], i[1]))
+
+        for i in range(1, 10):
+            member = getattr(staff_meeting, 'member{}'.format(i))
+            if member is not None:
+                staff = Staff.get(id=member)
+                self.table.insert('', 'end', values=(
+                    staff.name,
+                    staff.speciality
+                ))
         self.tables_tidying()
 
     def on_listbox_select(self, event):

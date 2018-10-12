@@ -9,9 +9,8 @@ class ButtonFrame(Frame):
     width = 31
     height = 31
 
-    def __init__(self, window, base, **kwargs):
+    def __init__(self, window, **kwargs):
         super().__init__(window, **kwargs)
-        self.base = base
         self.font = font.Font(size=16)
 
         module_directory = os.path.dirname(os.path.abspath(__file__))
@@ -42,13 +41,13 @@ class ButtonFrame(Frame):
             self,
             text="Zarządzenie",
             font=self.font
-            )
+        )
         self.create_decree_button.grid(row=0, column=4)
         self.create_protokol_button = Button(
             self,
             text="Protokół",
             font=self.font
-            )
+        )
         self.create_protokol_button.grid(row=0, column=5, padx=(0, 30))
         self.close_button = Button(self, image=exit)
         self.close_button.image = exit

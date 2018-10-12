@@ -1,15 +1,15 @@
+from collections import OrderedDict
 from tkinter.ttk import Button, Frame, Labelframe, Notebook, Treeview
 
-from backend.database import StaffMeeting
+from backend.database import StaffMeeting, Student
 
 
 class ListOfData(Labelframe):
 
     """Contains list of student in database"""
 
-    def __init__(self, window, base, **kwargs):
-        Labelframe.__init__(self, window, **kwargs)
-        self.base = base
+    def __init__(self, window, **kwargs):
+        super().__init__(window, **kwargs)
         self.notebook = Notebook(self)
         self.notebook.grid(row=0, column=0, padx=5, pady=5)
 
@@ -56,7 +56,12 @@ class ListOfData(Labelframe):
         self.notebook.add(self.staff_meeting, text="Zespoły")
 
     def get_students(self):
-        return self.base.get_dict_of_students()
+        '''return dict of student containing
+        {pesel: name}'''
+        return OrderedDict(sorted(
+            ((i.pesel, i.reverse_name) for i in Student.select()),
+            key=lambda t: t[1]
+        ))
 
     def get_pesel_from_name(self, name):
         students = self.get_students()
@@ -66,13 +71,7 @@ class ListOfData(Labelframe):
 
     def fill_student_list(self):
         self.student_list.delete(*self.student_list.get_children())
-        if not self.get_students():
-            return
-
-        for student, pesel in zip(
-            self.get_students().values(),
-            self.get_students().keys()
-        ):
+        for pesel, student in self.get_students().items():
             self.student_list.insert("", 'end', values=(student, pesel))
 
     def delete_from_student_list(self):
@@ -80,7 +79,11 @@ class ListOfData(Labelframe):
         pesel = str(self.student_list.item(selected_item)['values'][1])
         if len(pesel) < 11:
             pesel = "0" + pesel
-        self.base.delete_student(pesel)
+
+        student = Student.get(Student.pesel == pesel)
+        StaffMeeting.delete().where(StaffMeeting.student == student.id)
+        student.delete_instance()
+
         self.fill_student_list()
         self.fill_staffmeeting_list()
 
@@ -98,7 +101,7 @@ class ListOfData(Labelframe):
                 actual_iid = self.table.insert(
                     meeting_in_table[i.date],
                     'end',
-                    values=(self.base.get_student_name(i.student),)
+                    values=(Student.get(Student.id == i.student).reverse_name,)
                 )
                 self.table.set(actual_iid, column="id", value=i.id)
                 self.table.set(
@@ -110,7 +113,7 @@ class ListOfData(Labelframe):
                 actual_iid = self.table.insert(
                     meeting_in_table[i.date],
                     'end',
-                    values=(self.base.get_student_name(i.student),)
+                    values=(Student.get(Student.id == i.student).reverse_name,)
                 )
                 self.table.set(actual_iid, column="id", value=i[0])
                 self.table.set(actual_iid, column="student_id", value=i[20])

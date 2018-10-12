@@ -1,21 +1,30 @@
+<<<<<<< HEAD
 import os
 from configparser import ConfigParser
 
 from tkinter import Button, END, Entry, Frame, Label, LabelFrame, StringVar, Toplevel
+=======
+from tkinter import Button, Frame, LabelFrame, Text
+>>>>>>> master
 from tkinter.font import Font
 from tkinter.ttk import Combobox, Treeview
 
 from backend.database import School, Staff
 
 
-class SettingsWindow():
+class SettingsWindow:
+
     '''Toplevel widget for settings - name of center, specialist, schools'''
-    def __init__(self, window, base, **kwargs):
+
+    def __init__(self, window, **kwargs):
         self.window = window
+<<<<<<< HEAD
         self.base = base
         self.config = self.read_config()
         self.name = StringVar()
         self.name.trace('w', self.track_changes)
+=======
+>>>>>>> master
         self.my_font = Font(size=16)
 
         self.name_label_frame = LabelFrame(self.window, text="Nazwa poradni")
