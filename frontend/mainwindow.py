@@ -13,7 +13,7 @@ from .values import (
     recommend_special_education
 )
 
-from backend.database import DataBase, School, StaffMeeting, Student
+from backend.database import School, Staff, StaffMeeting, Student
 from backend.create import Decision
 from backend.create_decree import Decree
 from backend.create_protokol import Protokol
@@ -28,9 +28,8 @@ from frontend.frames.studentdata import ListOfData
 class MainWindow:
 
     def __init__(self, window):
-        self.base = DataBase()
         self.window = window
-        self.notebook = ListOfData(self.window, self.base, text="Baza danych")
+        self.notebook = ListOfData(self.window, text="Baza danych")
         self.notebook.grid(row=0, column=0, rowspan=8, sticky='n', padx=5)
         self.notebook.table.bind('<<TreeviewSelect>>', self.select_meeting)
         self.notebook.student_list.bind(
@@ -65,7 +64,7 @@ class MainWindow:
             padx=5
         )
 
-        self.staff_meeting_frame.insert_staff(staff={'team': [], 'id': ""})
+        self.staff_meeting_frame.insert_staff()
 
         self.button_frame = ButtonFrame(self.window)
         self.button_frame.grid(row=2, column=1, columnspan=2)
@@ -177,8 +176,13 @@ class MainWindow:
             )
 
         team = values['staff']['team']
-        for i, member in enumerate(self.convert_staff_to_id(team), 1):
-            setattr(staff_meeting, 'member{}'.format(i), member)
+        team.extend([None] * (9 - len(team)))
+        for i, member in enumerate(team, 1):
+            setattr(
+                staff_meeting,
+                'member{}'.format(i),
+                Staff.get(Staff.name == member[0]).id
+            )
         staff_meeting.save()
 
         # dodano nowy staffmeeting
@@ -264,15 +268,12 @@ class MainWindow:
         )['values']
         if parent:
             student_id = self.notebook.table.item(item)['values'][2]
-            staff_id = self.notebook.table.item(item)['values'][1]
-            staffmeeting_data = self.base.get_staffmeeting_data(staff_id)
-            self.staff_meeting_frame.insert_staff(staffmeeting_data)
+            staffmeeting_id = self.notebook.table.item(item)['values'][1]
+            self.staff_meeting_frame.insert_staff(staffmeeting_id)
             self.actual_student.insert_actual_data(
                 Student.get(Student.id_ == student_id)
             )
-            self.applicationframe.insert_application_data(
-                staffmeeting_data
-            )
+            self.applicationframe.insert_application_data(staffmeeting_id)
             self.applicationframe.get_reason()
 
     def select_student(self, event):

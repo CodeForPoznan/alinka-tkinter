@@ -1,6 +1,7 @@
 from tkinter import Label
 from tkinter.ttk import Button, Combobox, Entry, Labelframe
 
+from backend.database import StaffMeeting
 from frontend.values import reasons, application, timespan
 
 
@@ -204,32 +205,27 @@ class Application(Labelframe):
         if actual_reason not in supposed_reason:
             self.application_reason.delete(0, 'end')
 
-    def insert_application_data(self, student):
-        for entry, key in zip([
-            self.name_of_applicant_n,
-            self.name_of_applicant_g,
-            self.zip_code,
-            self.city,
-            self.address,
-            self.application_subject,
-            self.application_reason,
-            self.application_reason2,
-            self.timespan,
-            self.timespan_ind
-        ], [
-            'applicant_n',
-            'applicant_g',
-            'applicant_zipcode',
-            'applicant_city',
-            'applicant_address',
-            'subject',
-            'reason',
-            'reason2',
-            'timespan',
-            'timespan_ind'
-        ]):
-            entry.delete(0, 'end')
-            entry.insert(0, student[key])
+    def insert_application_data(self, staffmeeting_id):
+        staff_meeting = StaffMeeting.get(StaffMeeting.id == staffmeeting_id)
+        self.update_entry(self.application_subject, staff_meeting.subject)
+        self.update_entry(self.name_of_applicant_n, staff_meeting.applicant_n)
+        self.update_entry(self.name_of_applicant_g, staff_meeting.applicant_g)
+        self.update_entry(self.zip_code, staff_meeting.applicant_zipcode)
+        self.update_entry(self.city, staff_meeting.applicant_city)
+        self.update_entry(self.address, staff_meeting.applicant_address)
+        self.update_entry(self.timespan, staff_meeting.timespan)
+        self.update_entry(self.timespan_ind, staff_meeting.timespan_ind)
+
+        reason = staff_meeting.reason.split(',')
+        if len(reason[1]) < 2:
+            reason[1] = ''
+        self.update_entry(self.application_reason, reason[0])
+        self.update_entry(self.application_reason2, reason[1])
+
+    @staticmethod
+    def update_entry(entry, value):
+        entry.delete(0, 'end')
+        entry.insert(0, value)
 
     def clear(self):
         for entry in [
