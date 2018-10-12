@@ -1,7 +1,7 @@
 from collections import OrderedDict
 from tkinter.ttk import Button, Frame, Labelframe, Notebook, Treeview
 
-from backend.database import StaffMeeting, Student
+from backend.models import StaffMeeting, Student
 
 
 class ListOfData(Labelframe):

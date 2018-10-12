@@ -13,10 +13,10 @@ from .values import (
     recommend_special_education
 )
 
-from backend.database import School, Staff, StaffMeeting, Student
 from backend.create import Decision
 from backend.create_decree import Decree
 from backend.create_protokol import Protokol
+from backend.models import School, Staff, StaffMeeting, Student
 from frontend.frames.actualdata import StudentData
 from frontend.frames.buttons import ButtonFrame
 from frontend.frames.application import Application
