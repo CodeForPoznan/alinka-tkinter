@@ -32,6 +32,15 @@ timespan = [
     "do podjęcia nauki w szkole"
 ]
 
+sorts = [
+    "przedszkole",
+    "szkoła podstawowa",
+    "technikum",
+    "liceum ogólnokształcące",
+    "zasadnicza szkoła zawodowa",
+    "inne"
+]
+
 recommend_special_education = [
     "(należy określić zalecane warunki i formy wsparcia umożliwiające "
     "realizację indywidualnych potrzeb rozwojowych i edukacyjnych dziecka lub "

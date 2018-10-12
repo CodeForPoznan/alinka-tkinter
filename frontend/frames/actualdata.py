@@ -3,6 +3,7 @@ from tkinter import Entry, Label, StringVar
 from tkinter.ttk import Labelframe, Combobox
 
 from backend.database import School
+from frontend.values import sorts
 
 
 class StudentData(Labelframe):
@@ -190,9 +191,7 @@ class StudentData(Labelframe):
         self.school.select_clear()
 
     def list_of_sorts(self):
-        self.sort_of_school_box['values'] = sorted(
-            i.sort for i in School.select().distinct()
-        )
+        self.sort_of_school_box['values'] = sorts
 
     def clear_all_selection(self, event):
         self.school.select_clear()
