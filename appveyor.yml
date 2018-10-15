@@ -10,7 +10,7 @@ init:
   - cmd: set PATH=%PYTHON%;%PYTHON%\scripts;%PATH%
   - cmd: python --version
   - cmd: pip --version
-  - cmd: pip install codecov coverage cx_Freeze peewee pycodestyle pytest pytest-cov pytest-testdox python-docx
+  - cmd: pip install codecov coverage cx_Freeze peewee pycodestyle pytest pytest-cov pytest-testdox python-docx factory_boy
 
 
 test_script:

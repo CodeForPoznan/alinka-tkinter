@@ -6,7 +6,7 @@ from factory import base
 from factory import Faker
 from factory import fuzzy
 
-from backend.database import School, Staff, StaffMeeting, Student
+from backend.models import School, Staff, StaffMeeting, Student
 from frontend.values import reasons, timespan
 
 

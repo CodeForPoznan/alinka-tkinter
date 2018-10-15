@@ -1,7 +1,7 @@
 from tkinter import Button, LabelFrame, Listbox
 from tkinter.ttk import Entry, Label, Treeview
 
-from backend.database import Staff, StaffMeeting
+from backend.models import Staff, StaffMeeting
 
 
 class StaffFrame(LabelFrame):

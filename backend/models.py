@@ -1,18 +1,13 @@
-from os.path import abspath, dirname, isfile, join
-
-from peewee import IntegerField, Model, SqliteDatabase, TextField
-
-from backend.fixtures import staff, places
+from peewee import IntegerField, Model, TextField, Proxy
 
 
-DB_PATH = join(dirname(dirname(abspath(__file__))), 'database.db')
-DB = SqliteDatabase(DB_PATH)
+database_proxy = Proxy()
 
 
 class Staff(Model):
 
     class Meta:
-        database = DB
+        database = database_proxy
 
     name = TextField()
     speciality = TextField()
@@ -21,7 +16,7 @@ class Staff(Model):
 class School(Model):
 
     class Meta:
-        database = DB
+        database = database_proxy
 
     name = TextField()
     sort = TextField()
@@ -32,7 +27,7 @@ class School(Model):
 class Student(Model):
 
     class Meta:
-        database = DB
+        database = database_proxy
 
     name_n = TextField()
     name_g = TextField()
@@ -62,7 +57,7 @@ class Student(Model):
 class StaffMeeting(Model):
 
     class Meta:
-        database = DB
+        database = database_proxy
 
     date = TextField()
     member1 = IntegerField()
@@ -84,13 +79,3 @@ class StaffMeeting(Model):
     timespan = TextField()
     timespan_ind = TextField()
     student = IntegerField()
-
-
-if not isfile(DB_PATH):
-    DB.connect()
-    DB.create_tables([School, Staff, StaffMeeting, Student])
-
-    for i in staff:
-        Staff(**i).save()
-    for i in places:
-        School(**i).save()

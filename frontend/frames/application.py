@@ -1,7 +1,7 @@
 from tkinter import Label
 from tkinter.ttk import Button, Combobox, Entry, Labelframe
 
-from backend.database import StaffMeeting
+from backend.models import StaffMeeting
 from frontend.values import reasons, application, timespan
 
 

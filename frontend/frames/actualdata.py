@@ -2,7 +2,7 @@ import re
 from tkinter import Entry, Label, StringVar
 from tkinter.ttk import Labelframe, Combobox
 
-from backend.database import School
+from backend.models import School
 
 
 class StudentData(Labelframe):
