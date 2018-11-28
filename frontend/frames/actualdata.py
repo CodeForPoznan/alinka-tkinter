@@ -190,9 +190,9 @@ class StudentData(Labelframe):
         self.school.select_clear()
 
     def list_of_sorts(self):
-        self.sort_of_school_box['values'] = sorted(
+        self.sort_of_school_box['values'] = list(set(sorted(
             i.sort for i in School.select().distinct()
-        )
+        )))
 
     def clear_all_selection(self, event):
         self.school.select_clear()
@@ -263,7 +263,8 @@ class StudentData(Labelframe):
             'class_': self.class_entry,
             'school_sort': self.sort_of_school_box,
             'school_name': self.school
-        }:
+        }.items():
+            # import pdb;pdb.set_trace()
             entry.delete(0, 'end')
             entry.insert(0, getattr(student, key))
 

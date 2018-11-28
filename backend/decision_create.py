@@ -78,22 +78,25 @@ def staff_decree(document, value):
 
 def find_staff(values, specialization):
     list_of_staff = []
+    # import pdb; pdb.set_trace()
     if specialization == "psycholog":
-        for i in values['staff']['team']:
-            if specialization in i[1]:
-                list_of_staff.append(i)
+        for specialist in values['staff']['team']:
+            if specialization in specialist[1]:
+                list_of_staff.append(specialist)
     elif specialization == "lekarz":
-        for i in values['staff']['team']:
-            if specialization in i[1]:
-                list_of_staff.append(i)
-    else:
-        for i in values['staff']['team']:
-            if not (
-                "psycholog" in i[1] or
-                "lekarz" in i[1] or
-                "zespołu" in i[1]
-            ):
-                list_of_staff.append(i)
+        for specialist in values['staff']['team']:
+            if specialization in specialist[1]:
+                list_of_staff.append(specialist)
+    elif specialization == "pedagog":
+        for specialist in values['staff']['team']:
+            if specialization in specialist[1]:
+                list_of_staff.append(specialist)
+    elif specialization == "dowolny":
+        for specialist in values['staff']['team']:
+            if "zespołu" not in specialist[1]:
+                list_of_staff.append(specialist)
+    if not list_of_staff:
+        list_of_staff = values['staff']['team']
 
     choosen = random.choice(list_of_staff)
     name = choosen[0].split(' ')[1]
