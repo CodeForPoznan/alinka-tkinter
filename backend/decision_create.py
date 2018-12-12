@@ -75,22 +75,12 @@ def staff_decree(document, value):
             style='Normal_left_my'
         )
 
-def get_list_of_specialist(values, specialization):
+def find_staff(values, specialization):
     list_of_staff = []
     for specialist in values['staff']['team']:
         if specialization in specialist[1]:
             list_of_staff.append(specialist)
-    return list_of_staff
-
-def find_staff(values, specialization):
-    list_of_staff = []
-    if specialization == 'psycholog':
-        get_list_of_specialist(values, specialization)
-    elif specialization == 'lekarz':
-        get_list_of_specialist(values, specialization)
-    elif specialization == 'pedagog':
-        get_list_of_specialist(values, specialization)
-    elif specialization == 'dowolny':
+    if specialization == 'dowolny':
         for specialist in values['staff']['team']:
             if 'zespołu' not in specialist[1]:
                 list_of_staff.append(specialist)
@@ -102,7 +92,6 @@ def find_staff(values, specialization):
     if name[-1] == 'a':
         sex = False
     return [choosen, sex]
-
 
 def referent_speech(data):
     if data[1]:
