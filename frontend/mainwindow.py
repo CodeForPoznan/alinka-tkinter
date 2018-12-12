@@ -149,6 +149,7 @@ class MainWindow:
                 StaffMeeting.subject == values['subject'],
                 StaffMeeting.student == student.id
             )
+
             staff_meeting.applicant_n = values['applicant_n']
             staff_meeting.applicant_g = values['applicant_g']
             staff_meeting.applicant_zipcode = values['applicant_zipcode']
@@ -157,7 +158,7 @@ class MainWindow:
             staff_meeting.reason = (
                 values['reason'][1] + ", " + values['reason'][2]
             )
-            staff_meeting.timespan = values['timespan'],
+            staff_meeting.timespan = values['timespan']
             staff_meeting.timespan_ind = values['timespan_ind']
         except StaffMeeting.DoesNotExist:
             staff_meeting = StaffMeeting(

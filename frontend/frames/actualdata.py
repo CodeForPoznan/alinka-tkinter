@@ -143,7 +143,7 @@ class StudentData(Labelframe):
         )
         self.sort_of_school_box.bind(
             "<<ComboboxSelected>>",
-            self.clear_all_selection
+            self.clear_all_selections
         )
         self.sort_of_school_box.grid(
             row=6,
@@ -190,11 +190,17 @@ class StudentData(Labelframe):
         self.school.select_clear()
 
     def list_of_sorts(self):
-        self.sort_of_school_box['values'] = list(set(sorted(
+        """
+        Return list of types of schools
+        eg. ['szkoła podstawowa', 'przedszkole']
+        """
+        self.sort_of_school_box['values'] = list(
+            set(sorted(
             i.sort for i in School.select().distinct()
-        )))
+            ))
+        )
 
-    def clear_all_selection(self, event):
+    def clear_all_selections(self, event):
         self.school.select_clear()
         self.sort_of_school_box.select_clear()
 
@@ -264,7 +270,6 @@ class StudentData(Labelframe):
             'school_sort': self.sort_of_school_box,
             'school_name': self.school
         }.items():
-            # import pdb;pdb.set_trace()
             entry.delete(0, 'end')
             entry.insert(0, getattr(student, key))
 

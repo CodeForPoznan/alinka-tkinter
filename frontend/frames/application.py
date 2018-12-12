@@ -116,7 +116,7 @@ class Application(Labelframe):
         )
         self.application_reason.bind(
             '<<ComboboxSelected>>',
-            self.clear_all_selection
+            self.clear_all_selections
         )
         self.application_reason.grid(
             row=7,
@@ -136,7 +136,7 @@ class Application(Labelframe):
         self.application_reason2 = Combobox(self, width=40, values=reasons)
         self.application_reason2.bind(
             '<<ComboboxSelected>>',
-            self.clear_all_selection
+            self.clear_all_selections
         )
         self.application_reason2.grid(
             row=8,
@@ -149,7 +149,7 @@ class Application(Labelframe):
         self.timespan_lab = Label(self, text="Na okres")
         self.timespan_lab.grid(row=9, column=0, padx=5, pady=5, sticky='e')
         self.timespan = Combobox(self, values=timespan)
-        self.timespan.bind('<<ComboboxSelected>>', self.clear_all_selection)
+        self.timespan.bind('<<ComboboxSelected>>', self.clear_all_selections)
         self.timespan.grid(row=9, column=1, pady=5, padx=5, sticky='w')
         self.timespan_ind = Entry(self, width=18)
         self.timespan_ind.grid(
@@ -165,6 +165,7 @@ class Application(Labelframe):
         if self.application_subject.get() == "kształcenie specjalne":
             self.application_reason['values'] = reasons[0:-2]
             self.application_reason2['values'] = reasons[0:-2]
+            self.timespan_ind.delete(0, 'end')
             self.timespan_ind.config(state='disabled')
             self.timespan.config(state='active')
             self.application_reason2.config(state='active')
@@ -173,26 +174,32 @@ class Application(Labelframe):
             "indywidualne nauczanie"
         ]:
             self.application_reason['values'] = reasons[-2:]
+            self.timespan.delete(0, 'end')
             self.timespan.config(state='disabled')
             self.timespan_ind.config(state='active')
+            self.application_reason2.delete(0, 'end')
             self.application_reason2.config(state='disabled')
         if self.application_subject.get() in [
             "zajęcia rewalidacyjno-wychowawcze indywidualne",
             "zajęcia rewalidacyjno-wychowawcze zespołowe"
         ]:
             self.application_reason['values'] = (reasons[3],)
+            self.timespan.delete(0, 'end')
+            self.timespan_ind.delete(0, 'end')
             self.timespan.config(state='disabled')
             self.timespan_ind.config(state='disabled')
             self.application_reason2.config(state='disabled')
         if self.application_subject.get() == "wczesne wspomaganie rozwoju":
             self.application_reason['values'] = reasons[:9]
+            self.timespan_ind.delete(0, 'end')
             self.timespan_ind.config(state='disabled')
             self.timespan.config(state='active')
             self.timespan['values'] = [timespan[4]]
+            self.application_reason2.delete(0, 'end')
             self.application_reason2.config(state='disabled')
         self.application_subject.select_clear()
 
-    def clear_all_selection(self, event):
+    def clear_all_selections(self, event):
         self.application_subject.select_clear()
         self.application_reason.select_clear()
         self.application_reason2.select_clear()
