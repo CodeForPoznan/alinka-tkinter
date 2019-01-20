@@ -103,7 +103,6 @@ class MainWindow:
             return 1
 
         values = self.values()
-
         # Update/Create student
         try:
             student = Student.get(Student.pesel == values['pesel'])
@@ -150,6 +149,7 @@ class MainWindow:
                 StaffMeeting.subject == values['subject'],
                 StaffMeeting.student == student.id
             )
+
             staff_meeting.applicant_n = values['applicant_n']
             staff_meeting.applicant_g = values['applicant_g']
             staff_meeting.applicant_zipcode = values['applicant_zipcode']
@@ -158,7 +158,7 @@ class MainWindow:
             staff_meeting.reason = (
                 values['reason'][1] + ", " + values['reason'][2]
             )
-            staff_meeting.timespan = values['timespan'],
+            staff_meeting.timespan = values['timespan']
             staff_meeting.timespan_ind = values['timespan_ind']
         except StaffMeeting.DoesNotExist:
             staff_meeting = StaffMeeting(
@@ -178,6 +178,8 @@ class MainWindow:
         team = values['staff']['team']
         team.extend([None] * (9 - len(team)))
         for i, member in enumerate(team, 1):
+            if member is None:
+                continue
             setattr(
                 staff_meeting,
                 'member{}'.format(i),
@@ -271,7 +273,7 @@ class MainWindow:
             staffmeeting_id = self.notebook.table.item(item)['values'][1]
             self.staff_meeting_frame.insert_staff(staffmeeting_id)
             self.actual_student.insert_actual_data(
-                Student.get(Student.id_ == student_id)
+                Student.get(Student.id == student_id)
             )
             self.applicationframe.insert_application_data(staffmeeting_id)
             self.applicationframe.get_reason()
