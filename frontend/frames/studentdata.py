@@ -81,7 +81,6 @@ class ListOfData(Labelframe):
             pesel = "0" + pesel
 
         student = Student.get(Student.pesel == pesel)
-
         row = StaffMeeting.delete().where(StaffMeeting.student == student.id)
         row.execute()
         student.delete_instance()
