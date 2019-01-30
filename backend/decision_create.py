@@ -75,6 +75,7 @@ def staff_decree(document, value):
             style='Normal_left_my'
         )
 
+
 def find_staff(values, specialization):
     list_of_staff = []
     for specialist in values['staff']['team']:
@@ -94,6 +95,7 @@ def find_staff(values, specialization):
     else:
         sex = True
     return [choosen, sex]
+
 
 def referent_speech(data):
     if data[1]:
