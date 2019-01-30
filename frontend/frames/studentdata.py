@@ -117,11 +117,9 @@ class ListOfData(Labelframe):
                     values=(Student.get(Student.id == i.student).reverse_name,)
                 )
                 self.table.set(actual_iid, column="id", value=i.id)
-
                 self.table.set(
                     actual_iid, column="student_id", value=i.student
                 )
-
         for idd in meeting_in_table.values():
             if not self.table.parent(idd):
                 self.table.item(idd, open=True)
@@ -130,6 +128,7 @@ class ListOfData(Labelframe):
         selected_item = self.table.selection()
         if len(self.table.item(selected_item)['values']) < 2:
             return
-        staffmeeting_id = self.table.item(selected_item)['values'][1]      
+        staffmeeting_id = self.table.item(selected_item)['values'][1]
+
         StaffMeeting.get(StaffMeeting.id == staffmeeting_id).delete_instance()
         self.fill_staffmeeting_list()
