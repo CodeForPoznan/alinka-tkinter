@@ -91,6 +91,8 @@ def find_staff(values, specialization):
     name = choosen[0].split(' ')[1]
     if name[-1] == 'a':
         sex = False
+    else:
+        sex = True
     return [choosen, sex]
 
 def referent_speech(data):
@@ -237,7 +239,6 @@ def reason_individual_preschool(document, reason):
 
 
 def reason_individual(document, reason):
-    print(reason)
     if 'uniemożliwiający' in reason:
         unable = False
         barely_can = True
