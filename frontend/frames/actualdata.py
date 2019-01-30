@@ -196,7 +196,7 @@ class StudentData(Labelframe):
         """
         self.sort_of_school_box['values'] = list(
             set(sorted(
-            i.sort for i in School.select().distinct()
+                i.sort for i in School.select().distinct()
             ))
         )
 
