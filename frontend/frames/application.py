@@ -167,6 +167,7 @@ class Application(Labelframe):
             self.application_reason2['values'] = reasons[0:-2]
             self.timespan_ind.delete(0, 'end')
             self.timespan_ind.config(state='disabled')
+            self.timespan['values'] = timespan
             self.timespan.config(state='active')
             self.application_reason2.config(state='active')
         if self.application_subject.get() in [

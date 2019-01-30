@@ -81,7 +81,9 @@ class ListOfData(Labelframe):
             pesel = "0" + pesel
 
         student = Student.get(Student.pesel == pesel)
-        StaffMeeting.delete().where(StaffMeeting.student == student.id)
+        
+        row = StaffMeeting.delete().where(StaffMeeting.student == student.id)
+        row.execute()
         student.delete_instance()
 
         self.fill_student_list()
@@ -115,14 +117,17 @@ class ListOfData(Labelframe):
                     'end',
                     values=(Student.get(Student.id == i.student).reverse_name,)
                 )
-                self.table.set(actual_iid, column="id", value=i[0])
-                self.table.set(actual_iid, column="student_id", value=i[20])
+                self.table.set(actual_iid, column="id", value=i.id)
+                self.table.set(actual_iid, column="student_id", value=i.student)
         for idd in meeting_in_table.values():
             if not self.table.parent(idd):
                 self.table.item(idd, open=True)
 
     def delete_from_staffmeeting(self):
         selected_item = self.table.selection()
+        if len(self.table.item(selected_item)['values']) < 2:
+            return
         staffmeeting_id = self.table.item(selected_item)['values'][1]
+        
         StaffMeeting.get(StaffMeeting.id == staffmeeting_id).delete_instance()
         self.fill_staffmeeting_list()

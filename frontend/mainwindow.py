@@ -85,7 +85,7 @@ class MainWindow:
             self.create_protokol
         )
         self.button_frame.close_button.bind('<Button-1>', self.close)
-        self.fake_data()
+        # self.fake_data()
         self.notebook.fill_student_list()
         self.notebook.fill_staffmeeting_list()
 
