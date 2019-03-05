@@ -1,7 +1,7 @@
 # Alinka
 
 [![Gitter](https://badges.gitter.im/CodeForPoznan/alinka.svg)](https://gitter.im/CodeForPoznan/alinka?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-[![Build status](https://ci.appveyor.com/api/projects/status/6q7ph3bcden5rn2m/branch/master?svg=true)](https://ci.appveyor.com/project/CodeForPoznanBot/alinka/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/wni572yaaumueoo8/branch/master?svg=true)](https://ci.appveyor.com/project/CodeForPoznanBot/alinka-tkinter/branch/master)
 [![Code Coverage](https://codecov.io/gh/CodeForPoznan/alinka/coverage.svg)](https://codecov.io/gh/CodeForPoznan/alinka)
 
 
