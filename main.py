@@ -1,3 +1,4 @@
+import sys
 from os.path import abspath, dirname, isfile, join
 from tkinter import Tk
 
@@ -7,6 +8,8 @@ from backend.fixtures import staff, places
 from backend.models import database_proxy, School, Staff, StaffMeeting, Student
 from frontend.mainwindow import MainWindow
 
+if getattr(sys, 'frozen', False):
+    __file__ = sys.executable
 
 DB_PATH = join(dirname(abspath(__file__)), 'alinka.sqlite')
 DB = SqliteDatabase(DB_PATH)
