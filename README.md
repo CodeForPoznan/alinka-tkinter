@@ -1,3 +1,7 @@
+> **⚠️ This repository is archived and no longer maintained.**
+>
+> **If you are looking for ongoing development, please check out [the new repository here](https://github.com/CodeForPoznan/alinka-pyside).**
+
 # Alinka
 
 [![Gitter](https://badges.gitter.im/CodeForPoznan/alinka.svg)](https://gitter.im/CodeForPoznan/alinka?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
